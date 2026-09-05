@@ -1,5 +1,5 @@
-const CACHE='bus-lancon-v3';
-const ASSETS=['./','./manifest.json','./horaires.json','./pdfs/ligne-12.pdf','./pdfs/ligne-12-retour.pdf','./pdfs/ligne-17.pdf','./pdfs/ligne-530.pdf'];
+const CACHE='bus-lancon-v4';
+const ASSETS=['./','./manifest.json','./horaires.json?v=4','./pdfs/ligne-12.pdf','./pdfs/ligne-12-retour.pdf','./pdfs/ligne-17.pdf','./pdfs/ligne-530.pdf'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))); self.clients.claim();});
 self.addEventListener('fetch',e=>{

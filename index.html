@@ -85,7 +85,7 @@ button.ghost{background:#fff;color:#111}
 <script>
 let DATA={};
 async function loadData(){
-  const res=await fetch('horaires.json',{cache:'no-store'});
+  const res=await fetch('horaires.json?v=4',{cache:'no-store'});
   DATA=await res.json();
   const stopsList=[...new Set(Object.values(DATA).flatMap(v=>Object.values(v).filter(Boolean).flatMap(d=>d.stops.map(s=>s.nom))))].sort();
   const stopSelect=document.getElementById('stopSelect');
