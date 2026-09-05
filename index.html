@@ -3,268 +3,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bus Lançon — 12 · 17 · 530</title>
-<meta name="description" content="Horaires bus Lançon-Salon. 3 lignes, simple et lisible.">
+<title>Lançon Bus — 12 · 17 · 530</title>
 <meta name="theme-color" content="#111">
 <link rel="manifest" href="manifest.json">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:#111;line-height:1.4}
-a{color:inherit}
-header{max-width:720px;margin:0 auto;padding:28px 16px 12px}
-header h1{font-size:28px;font-weight:800;letter-spacing:-.02em}
-header p{color:#666;font-size:15px;margin-top:6px}
-.analyse{max-width:720px;margin:12px auto;padding:12px 16px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;font-size:13px;color:#444}
-.analyse b{color:#111}
-.analyse ul{margin:6px 0 0 18px}
-.container{max-width:720px;margin:0 auto;padding:16px}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:16px;padding:16px;margin-bottom:12px}
-.card h2{font-size:16px;font-weight:700;margin-bottom:10px}
-.label{font-size:12px;font-weight:600;color:#666;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-select,input,button{font:inherit}
-select,input{flex:1;min-width:140px;padding:12px;border:1px solid #ddd;border-radius:12px;background:#fff}
-button{padding:12px 16px;border-radius:12px;border:1px solid #111;background:#111;color:#fff;font-weight:700;cursor:pointer}
-button.secondary{background:#fff;color:#111}
-button:disabled{opacity:.5;cursor:not-allowed}
-.result{margin-top:12px;padding:14px;border-radius:12px;background:#f6f6f6;border:1px solid #e5e5e5;display:none}
+body{font-family:system-ui,-apple-system,Helvetica,Arial,sans-serif;background:#fff;color:#111}
+header{max-width:560px;margin:0 auto;padding:24px 16px 12px;text-align:center}
+header h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+header p{font-size:13px;color:#888;margin-top:4px}
+.container{max-width:560px;margin:0 auto;padding:0 12px 24px}
+.card{border:1px solid #e8e8e8;border-radius:16px;padding:16px;margin-top:12px}
+.card h2{font-size:14px;font-weight:700;margin-bottom:12px}
+label{font-size:11px;font-weight:700;color:#888;letter-spacing:.04em;text-transform:uppercase}
+.row{display:flex;gap:8px;margin-top:6px}
+select,input{flex:1;padding:12px;border:1px solid #ddd;border-radius:12px;background:#fff;font:inherit;font-size:15px}
+button{padding:12px 16px;border-radius:12px;border:1px solid #111;background:#111;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+button.ghost{background:#fff;color:#111}
+.result{margin-top:12px;padding:14px;border-radius:12px;background:#111;color:#fff;display:none}
 .result.show{display:block}
-.result strong{font-size:18px}
-.muted{color:#666;font-size:13px}
-.big-buttons{display:grid;gap:10px}
-.big-btn{width:100%;text-align:left;padding:18px 16px;border-radius:16px;border:1px solid #e5e5e5;background:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.big-btn:hover{border-color:#111}
-.big-btn .num{font-size:26px;font-weight:800}
-.big-btn .trajet{font-size:13px;color:#666}
-.big-btn.active{border-color:#111;background:#111;color:#fff}
-.big-btn.active .trajet{color:#bbb}
-.detail{display:none;margin-top:10px;border-top:1px solid #eee;padding-top:12px}
-.detail.show{display:block}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:8px 6px;text-align:left;border-bottom:1px solid #eee}
-th{font-size:12px;color:#666;font-weight:600}
-td.time{font-variant-numeric:tabular-nums;white-space:nowrap}
-td.next{background:#111;color:#fff;border-radius:8px}
-.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid #ddd}
-.badge.ok{background:#e6f4ea;border-color:#b7e1c5}
-.badge.warn{background:#fef3c7;border-color:#fde68a}
-footer{max-width:720px;margin:24px auto;padding:0 16px 24px;color:#888;font-size:12px;text-align:center}
+.result .big{font-size:18px;font-weight:800}
+.big-buttons{display:grid;gap:8px;margin-top:12px}
+.line-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px;border:1px solid #e8e8e8;border-radius:16px;background:#fff;cursor:pointer}
+.line-btn.active{background:#111;color:#fff;border-color:#111}
+.line-btn strong{font-size:20px}
+.line-btn span{font-size:12px;color:#888}
+.line-btn.active span{color:#aaa}
+.tabs{display:flex;gap:6px;margin:12px 0 8px}
+.tab{flex:1;padding:8px;border-radius:999px;border:1px solid #ddd;background:#fff;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
+.tab.active{background:#111;color:#fff;border-color:#111}
+.times{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
+.time{flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid #e8e8e8;background:#fff;font-size:14px;font-variant-numeric:tabular-nums}
+.time.next{background:#111;color:#fff;border-color:#111}
+.stop{margin-top:14px}
+.stop-name{font-size:13px;font-weight:700;margin-bottom:6px}
+.muted{font-size:12px;color:#888;text-align:center;margin-top:16px}
 </style>
 </head>
 <body>
 <header>
-  <h1>Bus Lançon</h1>
-  <p>3 lignes — simple, épuré. Pour tes enfants.</p>
+  <h1>Lançon Bus</h1>
+  <p>12 · 17 · 530 — app épurée</p>
 </header>
 
-<div class="analyse">
-  <b>Analyse des PDFs fournis :</b>
-  <ul>
-    <li><b>Ligne 12</b> — complet (2 pages, 22 horaires Salon → Lançon, travaux jusqu’au 03.10.26)</li>
-    <li><b>Ligne 17</b> — complet (2 pages, 10 horaires Salon → Aéroport via Lançon)</li>
-    <li><b>Ligne 580</b> — <span class="badge warn">INCOMPLET</span> 1 page vide, aucun horaire — remplacée par <b>530</b> comme demandé (scolaire Lançon–Salon, données partielles à confirmer)</li>
-  </ul>
-  <div class="muted" style="margin-top:6px">Extraction pdftotext vérifiée. 530 à fournir en PDF officiel pour 100% exact.</div>
-</div>
+<div class="container">
 
-<main class="container">
-
-  <!-- APP INTERACTIVE -->
-  <div class="card" id="app">
-    <h2>Quel bus prendre maintenant ?</h2>
-    <div class="label">1. Où es-tu ?</div>
+  <!-- APP -->
+  <div class="card">
+    <h2>Quel bus prendre ?</h2>
+    <label>Tu es où ?</label>
     <div class="row">
       <select id="stopSelect"></select>
-      <button id="geoBtn" class="secondary">Me localiser</button>
+      <button class="ghost" id="geoBtn">📍</button>
     </div>
-    <div id="geoMsg" class="muted"></div>
-
-    <div class="label" style="margin-top:12px">2. Heure</div>
+    <label style="margin-top:10px;display:block">Heure</label>
     <div class="row">
       <input type="time" id="timeInput">
-      <button id="nowBtn" class="secondary">Maintenant</button>
+      <button class="ghost" id="nowBtn">Maintenant</button>
     </div>
-
-    <div class="label" style="margin-top:12px">3. Ligne</div>
-    <div class="row">
-      <select id="lineSelect">
-        <option value="all">Toutes (12, 17, 530)</option>
-        <option value="12">12 — Salon ↔ Lançon</option>
-        <option value="17">17 — Salon ↔ Aéroport</option>
-        <option value="530">530 — Scolaire</option>
-      </select>
-      <button id="searchBtn">Voir prochains bus</button>
+    <div class="row" style="margin-top:10px">
+      <button style="flex:1" id="goBtn">Voir le prochain bus</button>
     </div>
-
     <div id="result" class="result"></div>
-    <div class="muted" style="margin-top:8px">Idée : à 16:30 à Salon → l’app te dit “12 à 16:30 quai 5” ou “17 à 17:30”. Géoloc = arrêt le plus proche.</div>
   </div>
 
-  <!-- BOUTONS EPURES -->
-  <div class="big-buttons" id="bigButtons">
-    <button class="big-btn" data-line="12"><span><span class="num">12</span><br><span class="trajet">Salon — Lançon</span></span><span>→</span></button>
-    <div class="card detail" id="detail-12"></div>
+  <!-- LIGNES -->
+  <div class="big-buttons">
+    <button class="line-btn" data-line="12"><span><strong>12</strong><br><span>Salon ↔ Lançon</span></span><span>›</span></button>
+    <div class="card" id="detail-12" style="display:none"></div>
 
-    <button class="big-btn" data-line="17"><span><span class="num">17</span><br><span class="trajet">Salon — Lançon — Aéroport</span></span><span>→</span></button>
-    <div class="card detail" id="detail-17"></div>
+    <button class="line-btn" data-line="17"><span><strong>17</strong><br><span>Salon ↔ Aéroport</span></span><span>›</span></button>
+    <div class="card" id="detail-17" style="display:none"></div>
 
-    <button class="big-btn" data-line="530"><span><span class="num">530</span><br><span class="trajet">Scolaire Lançon — Salon</span></span><span>→</span></button>
-    <div class="card detail" id="detail-530"></div>
+    <button class="line-btn" data-line="530"><span><strong>530</strong><br><span>Scolaire</span></span><span>›</span></button>
+    <div class="card" id="detail-530" style="display:none"></div>
   </div>
 
-  <div class="card muted" style="font-size:13px">
-    PDFs officiels : <a href="pdfs/ligne-12.pdf">12</a> · <a href="pdfs/ligne-17.pdf">17</a> · <a href="pdfs/ligne-580.pdf">580 (vide, gardé pour ref)</a> + <a href="horaires.json">horaires.json</a><br>
-    Source La Métropole Mobilité. Page épurée — zéro icône inutile.
-  </div>
-
-</main>
-
-<footer>
-  bus-lancon · <a href="https://github.com/sajomtech-commits/bus-lancon">GitHub</a> · PWA installable
-</footer>
+  <p class="muted">Fonctionne hors-ligne · Ajouter à l’écran d’accueil</p>
+</div>
 
 <script>
-// Données horaires simplifiées (extraites)
-const DATA = {
- "12": {
-   trajet:"SALON — LANÇON", stops:[
-     {nom:"GR PEM Quai 5", times:["06:00","07:00","07:30","08:00",null,null,"09:30","10:30","11:30",null,"12:30","13:00","13:30","14:00","14:30","15:30","16:30","17:00","17:30","18:05","18:30","19:15"], geo:[43.6389,5.0856]},
-     {nom:"Mourguettes", times:["06:11","07:11","07:43","08:13","08:43","09:11","09:41","10:41","11:41","12:14","12:41","13:11","13:41","14:11","14:41","15:41","16:44","17:14","17:44","18:19","18:41","19:26"], geo:[43.588,5.162]},
-     {nom:"Marcel Pagnol", times:["06:17","07:17","07:49","08:19","08:49","09:17","09:47","10:47","11:47","12:20","12:47","13:17","13:47","14:17","14:47","15:47","16:50","17:20","17:50","18:25","18:47","19:32"], geo:[43.586,5.168]}
-   ]
- },
- "17": {
-   trajet:"SALON — AEROPORT", stops:[
-     {nom:"GR PEM Quai 8", times:["05:30","06:30","08:30","09:30","11:30","12:30","14:30","15:30","17:30","18:30"], geo:[43.6389,5.0856]},
-     {nom:"Mourguettes", times:["05:41","06:46","08:41","09:41","11:46","12:46","14:41","15:41","17:46","18:46"], geo:[43.588,5.162]},
-     {nom:"Aéroport Marseille Provence", times:["06:30","07:46","09:30","10:30","12:46","13:46","15:30","16:30","18:46","19:46"], geo:[43.436,5.215]}
-   ]
- },
- "530": {
-   trajet:"LANÇON — SALON (scolaire)", stops:[
-     {nom:"Trophées Quai 5", times:["16:10","17:25","18:15"], geo:[43.637,5.087]},
-     {nom:"Marcel Pagnol", times:["16:34","17:48","18:38"], geo:[43.586,5.168]},
-     {nom:"Sibourg le Stade", times:["16:45","17:59","18:49"], geo:[43.575,5.185]}
-   ], note:"Données partielles"
- }
-};
-
-const allStops = [];
-Object.keys(DATA).forEach(line=>{
-  DATA[line].stops.forEach(s=>{
-    if(!allStops.find(x=>x.nom===s.nom)) allStops.push({nom:s.nom, geo:s.geo, lines:[]});
-  });
-});
-Object.keys(DATA).forEach(line=>{
-  DATA[line].stops.forEach(s=>{
-    const entry = allStops.find(x=>x.nom===s.nom);
-    if(!entry.lines.includes(line)) entry.lines.push(line);
-  });
-});
-
-const stopSelect=document.getElementById('stopSelect');
-allStops.forEach(s=>{
-  const o=document.createElement('option');
-  o.value=s.nom; o.textContent=`${s.nom} (${s.lines.join('/')})`;
-  stopSelect.appendChild(o);
-});
-stopSelect.value="GR PEM Quai 5";
-
-const timeInput=document.getElementById('timeInput');
-function setNow(){ const d=new Date(); timeInput.value=d.toTimeString().slice(0,5); }
-setNow();
-document.getElementById('nowBtn').onclick=setNow;
-
-function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
-
-function nextBuses(stopName, timeStr, lineFilter){
-  const mins=toMin(timeStr);
-  const res=[];
-  const lines = lineFilter==='all' ? Object.keys(DATA) : [lineFilter];
-  lines.forEach(line=>{
-    const stop = DATA[line].stops.find(s=>s.nom===stopName) || DATA[line].stops[0];
-    // if exact stop not served, take first stop of line as fallback
-    const times = stop.times.filter(Boolean);
-    for(const t of times){
-      if(toMin(t) >= mins){
-        res.push({line, stop:stop.nom, time:t, wait: toMin(t)-mins});
-        break;
-      }
-    }
-    // if no later, show first tomorrow
-    if(!res.find(r=>r.line===line)){
-      res.push({line, stop:stop.nom, time:times[0], wait:null, tomorrow:true});
-    }
-  });
-  return res.sort((a,b)=> (a.wait??9999)-(b.wait??9999));
+const DATA={
+"12":{
+  "aller":{"direction":"Salon → Lançon","stops":[
+    {"nom":"Salon · PEM Quai 5","times":["06:00","07:00","07:30","08:00",null,null,"09:30","10:30","11:30",null,"12:30","13:00","13:30","14:00","14:30","15:30","16:30","17:00","17:30","18:05","18:30","19:15"]},
+    {"nom":"Salon · Foch","times":["06:02","07:02","07:33","08:03","08:33","09:02","09:32","10:32","11:32","12:03","12:32","13:02","13:32","14:02","14:32","15:32","16:33","17:03","17:33","18:08","18:32","19:17"]},
+    {"nom":"Lançon · Mourguettes","times":["06:11","07:11","07:43","08:13","08:43","09:11","09:41","10:41","11:41","12:14","12:41","13:11","13:41","14:11","14:41","15:41","16:44","17:14","17:44","18:19","18:41","19:26"]},
+    {"nom":"Lançon · Marcel Pagnol","times":["06:17","07:17","07:49","08:19","08:49","09:17","09:47","10:47","11:47","12:20","12:47","13:17","13:47","14:17","14:47","15:47","16:50","17:20","17:50","18:25","18:47","19:32"]}
+  ]},
+  "retour":{"direction":"Lançon → Salon","stops":[
+    {"nom":"Lançon · Marcel Pagnol","times":["06:44","06:34","07:30","08:00","08:33","09:03","10:03","11:03","11:33","12:00","12:33","13:03","13:33","14:03","15:03","16:00","16:30","17:00","17:30","18:00","18:34","19:34"]},
+    {"nom":"Lançon · Mourguettes","times":["06:47","06:37","07:33","08:03","08:36","09:06","10:06","11:06","11:36","12:03","12:36","13:06","13:36","14:06","15:06","16:03","16:33","17:03","17:33","18:03","18:37","19:37"]},
+    {"nom":"Salon · PEM Quai 5","times":["07:00","06:50","07:50","08:20","08:53","09:20","10:20","11:20","11:50","12:20","12:50","13:20","13:50","14:20","15:20","16:20","16:50","17:20","17:50","18:20","18:50","19:50"]}
+  ]}
+},
+"17":{
+  "aller":{"direction":"Salon → Aéroport","stops":[
+    {"nom":"Salon · PEM Quai 8","times":["05:30","06:30","08:30","09:30","11:30","12:30","14:30","15:30","17:30","18:30"]},
+    {"nom":"Lançon · Mourguettes","times":["05:41","06:46","08:41","09:41","11:46","12:46","14:41","15:41","17:46","18:46"]},
+    {"nom":"Aéroport","times":["06:30","07:46","09:30","10:30","12:46","13:46","15:30","16:30","18:46","19:46"]}
+  ]}
+},
+"530":{
+  "aller":{"direction":"Scolaire","stops":[
+    {"nom":"Salon · Trophées","times":["16:10","17:25","18:15"]},
+    {"nom":"Lançon · Sibourg","times":["16:45","17:59","18:49"]}
+  ]}
 }
+};
 
-const result=document.getElementById('result');
-document.getElementById('searchBtn').onclick=()=>{
-  const stop=stopSelect.value;
-  const time=timeInput.value || "16:30";
-  const line=document.getElementById('lineSelect').value;
-  const buses=nextBuses(stop,time,line);
-  let html=`<div class="muted">À <b>${time}</b> depuis <b>${stop}</b></div>`;
-  buses.forEach(b=>{
-    const wait = b.tomorrow ? "demain" : `${b.wait} min`;
-    html+=`<div style="margin-top:10px;padding:10px;background:#fff;border:1px solid #ddd;border-radius:12px"><strong>Ligne ${b.line}</strong> — ${DATA[b.line].trajet}<br>Départ <strong>${b.time}</strong> à <strong>${b.stop}</strong> <span class="badge ok">${wait}</span></div>`;
+const stopsList=[...new Set(Object.values(DATA).flatMap(v=>Object.values(v).filter(Boolean).flatMap(d=>d.stops.map(s=>s.nom))))];
+const stopSelect=document.getElementById('stopSelect');
+stopsList.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;stopSelect.appendChild(o)});
+stopSelect.value="Salon · PEM Quai 5";
+const timeInput=document.getElementById('timeInput');
+function setNow(){timeInput.value=new Date().toTimeString().slice(0,5)};setNow();
+document.getElementById('nowBtn').onclick=setNow;
+function toMin(t){const [h,m]=t.split(':').map(Number);return h*60+m}
+document.getElementById('goBtn').onclick=()=>{
+  const stop=stopSelect.value, t=timeInput.value||"16:30";
+  const min=toMin(t);
+  let best=null;
+  Object.entries(DATA).forEach(([line,dirs])=>{
+    Object.entries(dirs).forEach(([dirKey,dir])=>{
+      if(!dir) return;
+      const s=dir.stops.find(x=>x.nom===stop) || dir.stops[0];
+      const times=s.times.filter(Boolean);
+      const nxt=times.find(x=>toMin(x)>=min) || times[0];
+      const wait = times.find(x=>toMin(x)>=min) ? toMin(nxt)-min : null;
+      if(wait!==null && (best===null || wait<best.wait)) best={line,dir:dir.direction,stop:s.nom,time:nxt,wait};
+    });
   });
-  // example geoloc logic
-  html+=`<div class="muted" style="margin-top:8px">Astuce : 16:30 à Salon → 12 à 16:30 (Quai 5) est le plus tôt, 17 à 17:30 ensuite.</div>`;
-  result.innerHTML=html;
-  result.classList.add('show');
+  const el=document.getElementById('result');
+  if(best){
+    el.innerHTML=`<div class="big">Ligne ${best.line} à ${best.time}</div><div style="opacity:.8;margin-top:4px">${best.dir} · départ ${best.stop} · dans ${best.wait} min</div>`;
+  } else {
+    el.innerHTML=`<div class="big">Aucun bus</div>`;
+  }
+  el.classList.add('show');
 };
-
-// Geo
 document.getElementById('geoBtn').onclick=()=>{
-  const msg=document.getElementById('geoMsg');
-  if(!navigator.geolocation){ msg.textContent="Géolocalisation non supportée"; return; }
-  msg.textContent="Localisation…";
-  navigator.geolocation.getCurrentPosition(pos=>{
-    const {latitude,longitude}=pos.coords;
-    // nearest stop via haversine
-    function dist(a,b){ const R=6371; const dLat=(b[0]-a[0])*Math.PI/180; const dLon=(b[1]-a[1])*Math.PI/180; const aa=Math.sin(dLat/2)**2+Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(aa)); }
-    let best=null, bestD=Infinity;
-    allStops.forEach(s=>{ const d=dist([latitude,longitude], s.geo); if(d<bestD){bestD=d; best=s;} });
-    if(best){ stopSelect.value=best.nom; msg.textContent=`Proche de ${best.nom} (${bestD.toFixed(2)} km) — ${best.lines.join(', ')}`; document.getElementById('searchBtn').click(); }
-  }, err=>{ msg.textContent="Refus ou erreur géoloc : "+err.message; }, {enableHighAccuracy:true, timeout:8000});
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(p=>{
+    const lat=p.coords.latitude;
+    // Salon lat 43.64 -> Salon, sinon Lançon
+    stopSelect.value = lat>43.61 ? "Salon · PEM Quai 5" : "Lançon · Mourguettes";
+    document.getElementById('goBtn').click();
+  });
 };
 
-// Big buttons épurés
-document.querySelectorAll('.big-btn').forEach(btn=>{
+// Détails lignes
+document.querySelectorAll('.line-btn').forEach(btn=>{
   btn.onclick=()=>{
     const line=btn.dataset.line;
     const detail=document.getElementById('detail-'+line);
-    const isShow=detail.classList.contains('show');
-    document.querySelectorAll('.detail').forEach(d=>d.classList.remove('show'));
-    document.querySelectorAll('.big-btn').forEach(b=>b.classList.remove('active'));
-    if(!isShow){
-      detail.classList.add('show'); btn.classList.add('active');
-      renderDetail(line, detail);
-    }
-  };
+    const open=detail.style.display!=='none';
+    document.querySelectorAll('[id^=detail-]').forEach(d=>d.style.display='none');
+    document.querySelectorAll('.line-btn').forEach(b=>b.classList.remove('active'));
+    if(open){detail.style.display='none';return}
+    btn.classList.add('active');detail.style.display='block';
+    render(line,detail);
+  }
 });
-
-function renderDetail(line, el){
-  const data=DATA[line];
-  const now = timeInput.value || new Date().toTimeString().slice(0,5);
-  let html=`<div class="muted">${data.trajet} ${data.note?`<span class="badge warn">${data.note}</span>`:''}</div><table><thead><tr><th>Arrêt</th><th>Prochains horaires</th></tr></thead><tbody>`;
-  data.stops.forEach(s=>{
-    const times=s.times.filter(Boolean).join(" · ");
-    // highlight next
-    let nextClass="";
-    const next = s.times.filter(Boolean).find(t=> toMin(t) >= toMin(now));
-    html+=`<tr><td>${s.nom}</td><td class="time">${s.times.filter(Boolean).map(t=> t===next?`<span class="badge ok">${t}</span>`:`${t}`).join(" ")}</td></tr>`;
-  });
-  html+=`</tbody></table><div class="muted" style="margin-top:8px"><a href="pdfs/ligne-${line}.pdf" target="_blank">Voir PDF officiel</a> ${line==="530"?`· <a href="pdfs/ligne-580.pdf">PDF 580 (vide)</a>`:``}</div>`;
+function render(line,el){
+  const dirs=DATA[line];
+  const hasRetour=!!dirs.retour;
+  let html='';
+  if(hasRetour){
+    html+=`<div class="tabs"><button class="tab active" data-dir="aller">Aller</button><button class="tab" data-dir="retour">Retour</button></div>`;
+  }
+  html+=`<div id="times-${line}"></div>`;
   el.innerHTML=html;
+  if(hasRetour){
+    el.querySelectorAll('.tab').forEach(tab=>{
+      tab.onclick=()=>{
+        el.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
+        draw(line,tab.dataset.dir,el.querySelector(`#times-${line}`));
+      }
+    });
+  }
+  draw(line,'aller',el.querySelector(`#times-${line}`));
 }
-// auto open 12
-document.querySelector('[data-line="12"]').click();
-
+function draw(line,dir,container){
+  const data=DATA[line][dir];
+  const now=timeInput.value||"16:30";
+  let html=`<div style="font-size:12px;color:#888;margin-bottom:8px">${data.direction}</div>`;
+  data.stops.forEach(s=>{
+    html+=`<div class="stop"><div class="stop-name">${s.nom}</div><div class="times">`;
+    s.times.filter(Boolean).forEach(t=>{
+      const cls = t===s.times.filter(Boolean).find(x=>toMin(x)>=toMin(now)) ? 'time next' : 'time';
+      html+=`<span class="${cls}">${t}</span>`;
+    });
+    html+=`</div></div>`;
+  });
+  container.innerHTML=html;
+}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
 </body>
 </html>
-<!-- cache-bust 2026-09-05T12:24:12+02:00 -->

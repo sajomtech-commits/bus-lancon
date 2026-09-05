@@ -1,46 +1,379 @@
 {
-  "analyse": {
-    "date_extraction": "2026-09-05",
-    "source": "PDFs La Métropole Mobilité wkhtmltopdf",
-    "lignes": {
-      "12": { "status": "complet", "pages": 2, "direction": "Salon -> Lançon-Provence", "perturbation": "travaux Lançon jusqu'au 03.10.26", "stops": 17 },
-      "17": { "status": "complet", "pages": 2, "direction": "Salon -> Aéroport via Lançon/Rognac/Vitrolles", "stops": 23 },
-      "580": { "status": "INCOMPLET", "pages": 1, "direction": "La Fare -> Salon", "note": "PDF vide - aucun horaire extrait, seulement liste d'arrêts (Barrales, Chemin Meunier, Giraude, Favier, Grand Jas, Broglie, Gramenieres, Craponne, GR Gandonne). Re-fetch nécessaire. Utilisateur demande ligne 530 (scolaire Lançon-Salon) à la place." },
-      "530": { "status": "partiel - reconstitué via busmaps/moovit", "note": "Scolaire Lançon-Salon, 11 arrêts, service lun-ven 16:10-18:39 (Trophées Quai 5 -> Sibourg le Stade). Matin 07:05-08:10. À confirmer avec PDF officiel 530." }
+  "12": {
+    "aller": {
+      "direction": "Salon → Lançon",
+      "stops": [
+        {
+          "nom": "Salon - GR PEM Quai 5",
+          "times": [
+            "06:00",
+            "07:00",
+            "07:30",
+            "08:00",
+            null,
+            null,
+            "09:30",
+            "10:30",
+            "11:30",
+            null,
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:30",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:05",
+            "18:30",
+            "19:15"
+          ],
+          "geo": [
+            43.6389,
+            5.0856
+          ]
+        },
+        {
+          "nom": "Salon - Foch",
+          "times": [
+            "06:02",
+            "07:02",
+            "07:33",
+            "08:03",
+            "08:33",
+            "09:02",
+            "09:32",
+            "10:32",
+            "11:32",
+            "12:03",
+            "12:32",
+            "13:02",
+            "13:32",
+            "14:02",
+            "14:32",
+            "15:32",
+            "16:33",
+            "17:03",
+            "17:33",
+            "18:08",
+            "18:32",
+            "19:17"
+          ]
+        },
+        {
+          "nom": "Lançon - Mourguettes",
+          "times": [
+            "06:11",
+            "07:11",
+            "07:43",
+            "08:13",
+            "08:43",
+            "09:11",
+            "09:41",
+            "10:41",
+            "11:41",
+            "12:14",
+            "12:41",
+            "13:11",
+            "13:41",
+            "14:11",
+            "14:41",
+            "15:41",
+            "16:44",
+            "17:14",
+            "17:44",
+            "18:19",
+            "18:41",
+            "19:26"
+          ],
+          "geo": [
+            43.588,
+            5.162
+          ]
+        },
+        {
+          "nom": "Lançon - Marcel Pagnol",
+          "times": [
+            "06:17",
+            "07:17",
+            "07:49",
+            "08:19",
+            "08:49",
+            "09:17",
+            "09:47",
+            "10:47",
+            "11:47",
+            "12:20",
+            "12:47",
+            "13:17",
+            "13:47",
+            "14:17",
+            "14:47",
+            "15:47",
+            "16:50",
+            "17:20",
+            "17:50",
+            "18:25",
+            "18:47",
+            "19:32"
+          ],
+          "geo": [
+            43.586,
+            5.168
+          ]
+        },
+        {
+          "nom": "Lançon - Val de Sibourg",
+          "times": [
+            "06:31",
+            null,
+            null,
+            null,
+            null,
+            "09:31",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "14:31",
+            null,
+            null,
+            null,
+            null,
+            null,
+            "19:01",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    "retour": {
+      "direction": "Lançon → Salon",
+      "stops": [
+        {
+          "nom": "Lançon - Val de Sibourg",
+          "times": [
+            "06:31",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "11:20",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "15:47",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "nom": "Lançon - Marcel Pagnol",
+          "times": [
+            "06:44",
+            "06:34",
+            "07:30",
+            "08:00",
+            "08:33",
+            "09:03",
+            "10:03",
+            "11:03",
+            "11:33",
+            "12:00",
+            "12:33",
+            "13:03",
+            "13:33",
+            "14:03",
+            "15:03",
+            "16:00",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:00",
+            "18:34",
+            "19:34"
+          ]
+        },
+        {
+          "nom": "Lançon - Mourguettes",
+          "times": [
+            "06:47",
+            "06:37",
+            "07:33",
+            "08:03",
+            "08:36",
+            "09:06",
+            "10:06",
+            "11:06",
+            "11:36",
+            "12:03",
+            "12:36",
+            "13:06",
+            "13:36",
+            "14:06",
+            "15:06",
+            "16:03",
+            "16:33",
+            "17:03",
+            "17:33",
+            "18:03",
+            "18:37",
+            "19:37"
+          ]
+        },
+        {
+          "nom": "Salon - GR PEM Quai 5",
+          "times": [
+            "07:00",
+            "06:50",
+            "07:50",
+            "08:20",
+            "08:53",
+            "09:20",
+            "10:20",
+            "11:20",
+            "11:50",
+            "12:20",
+            "12:50",
+            "13:20",
+            "13:50",
+            "14:20",
+            "15:20",
+            "16:20",
+            "16:50",
+            "17:20",
+            "17:50",
+            "18:20",
+            "18:50",
+            "19:50"
+          ],
+          "geo": [
+            43.6389,
+            5.0856
+          ]
+        }
+      ]
     }
   },
-  "12": {
-    "numero": "12",
-    "trajet": "SALON — LANÇON",
-    "direction": "Lançon-Provence",
-    "arrets": [
-      {"nom": "GR PEM Quai 5", "ville": "Salon", "times": ["06:00","07:00","07:30","08:00",null,null,"09:30","10:30","11:30",null,"12:30","13:00","13:30","14:00","14:30","15:30","16:30","17:00","17:30","18:05","18:30","19:15"], "geo": [43.6389,5.0856]},
-      {"nom": "Foch", "ville": "Salon", "times": ["06:02","07:02","07:33","08:03","08:33","09:02","09:32","10:32","11:32","12:03","12:32","13:02","13:32","14:02","14:32","15:32","16:33","17:03","17:33","18:08","18:32","19:17"], "geo": [43.637,5.087]},
-      {"nom": "Mourguettes", "ville": "Lançon", "times": ["06:11","07:11","07:43","08:13","08:43","09:11","09:41","10:41","11:41","12:14","12:41","13:11","13:41","14:11","14:41","15:41","16:44","17:14","17:44","18:19","18:41","19:26"], "geo": [43.588,5.162]},
-      {"nom": "Marcel Pagnol", "ville": "Lançon", "times": ["06:17","07:17","07:49","08:19","08:49","09:17","09:47","10:47","11:47","12:20","12:47","13:17","13:47","14:17","14:47","15:47","16:50","17:20","17:50","18:25","18:47","19:32"], "geo": [43.586,5.168]},
-      {"nom": "Val de Sibourg", "ville": "Lançon", "times": ["06:31",null,null,null,null,"09:31",null,null,null,null,null,null,null,"14:31",null,null,null,null,null,"19:01",null,null], "geo": [43.575,5.185]}
-    ]
-  },
   "17": {
-    "numero": "17",
-    "trajet": "SALON — AEROPORT via LANÇON",
-    "direction": "Rognac / Aéroport Marseille Provence",
-    "arrets": [
-      {"nom": "GR PEM Quai 8", "ville": "Salon", "times": ["05:30","06:30","08:30","09:30","11:30","12:30","14:30","15:30","17:30","18:30"], "geo": [43.6389,5.0856]},
-      {"nom": "Mourguettes", "ville": "Lançon", "times": ["05:41","06:46","08:41","09:41","11:46","12:46","14:41","15:41","17:46","18:46"], "geo": [43.588,5.162]},
-      {"nom": "Marcel Pagnol", "ville": "Lançon", "times": ["05:42","06:47","08:42","09:42","11:47","12:47","14:42","15:42","17:47","18:47"], "geo": [43.586,5.168]},
-      {"nom": "Aéroport Marseille Provence", "ville": "Marignane", "times": ["06:30","07:46","09:30","10:30","12:46","13:46","15:30","16:30","18:46","19:46"], "geo": [43.436,5.215]}
-    ]
+    "aller": {
+      "direction": "Salon → Aéroport",
+      "stops": [
+        {
+          "nom": "Salon - GR PEM Quai 8",
+          "times": [
+            "05:30",
+            "06:30",
+            "08:30",
+            "09:30",
+            "11:30",
+            "12:30",
+            "14:30",
+            "15:30",
+            "17:30",
+            "18:30"
+          ],
+          "geo": [
+            43.6389,
+            5.0856
+          ]
+        },
+        {
+          "nom": "Lançon - Mourguettes",
+          "times": [
+            "05:41",
+            "06:46",
+            "08:41",
+            "09:41",
+            "11:46",
+            "12:46",
+            "14:41",
+            "15:41",
+            "17:46",
+            "18:46"
+          ]
+        },
+        {
+          "nom": "Lançon - Marcel Pagnol",
+          "times": [
+            "05:42",
+            "06:47",
+            "08:42",
+            "09:42",
+            "11:47",
+            "12:47",
+            "14:42",
+            "15:42",
+            "17:47",
+            "18:47"
+          ]
+        },
+        {
+          "nom": "Aéroport Marseille Provence",
+          "times": [
+            "06:30",
+            "07:46",
+            "09:30",
+            "10:30",
+            "12:46",
+            "13:46",
+            "15:30",
+            "16:30",
+            "18:46",
+            "19:46"
+          ],
+          "geo": [
+            43.436,
+            5.215
+          ]
+        }
+      ]
+    }
   },
   "530": {
-    "numero": "530",
-    "trajet": "LANÇON — SALON (scolaire)",
-    "direction": "Salon / Lançon",
-    "note": "Horaires reconstitués - PDF officiel 530 à fournir pour 100% exactitude",
-    "arrets": [
-      {"nom": "Trophées Quai 5", "ville": "Salon", "times": ["16:10","17:25","18:15"], "geo": [43.637,5.087]},
-      {"nom": "Marcel Pagnol", "ville": "Lançon", "times": ["16:34","17:48","18:38"], "geo": [43.586,5.168]},
-      {"nom": "Sibourg le Stade", "ville": "Lançon", "times": ["16:45","17:59","18:49"], "geo": [43.575,5.185]}
-    ]
+    "aller": {
+      "direction": "Salon → Lançon (scolaire)",
+      "stops": [
+        {
+          "nom": "Salon - Trophées",
+          "times": [
+            "16:10",
+            "17:25",
+            "18:15"
+          ]
+        },
+        {
+          "nom": "Lançon - Marcel Pagnol",
+          "times": [
+            "16:34",
+            "17:48",
+            "18:38"
+          ]
+        },
+        {
+          "nom": "Lançon - Sibourg",
+          "times": [
+            "16:45",
+            "17:59",
+            "18:49"
+          ]
+        }
+      ]
+    }
   }
 }
