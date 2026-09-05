@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bus Lançon - Horaires Lignes 12, 17, 580 | Salon Bus</title>
+<meta name="description" content="Horaires des bus Lançon-de-Provence - Lignes 12 (Salon-Lançon), 17 (Salon-Aéroport via Lançon/Rognac/Vitrolles), 580 (La Fare-Salon). PDFs officiels La Métropole Mobilité - consultation facile pour toute la famille.">
+<meta name="theme-color" content="#0ea5e9">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚌</text></svg>">
+<style>
+  :root{--blue:#0ea5e9;--blue-dark:#0284c7;--green:#10b981;--green-dark:#059669;--orange:#f59e0b;--orange-dark:#d97706;--bg:#f0f9ff;--card:#ffffff;--text:#0f172a;--muted:#64748b;--radius:20px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  header{background:linear-gradient(135deg,#0ea5e9 0%,#0284c7 50%,#0369a1 100%);color:white;padding:28px 20px 36px;text-align:center;position:relative;overflow:hidden}
+  header::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.15) 0%,transparent 50%)}
+  header *{position:relative}
+  .badge-top{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.02em}
+  h1{font-size:clamp(28px,5vw,42px);font-weight:800;margin:14px 0 6px;letter-spacing:-.02em}
+  h1 span{font-weight:300;opacity:.95}
+  .subtitle{opacity:.9;font-size:clamp(14px,2.5vw,18px);max-width:640px;margin:0 auto}
+  .meta{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-size:13px;opacity:.9}
+  .meta span{background:rgba(255,255,255,.15);padding:6px 12px;border-radius:999px}
+  .container{max-width:1100px;margin:0 auto;padding:24px 16px}
+  .intro{background:white;border-radius:var(--radius);padding:18px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-top:-22px;border:1px solid #e0f2fe}
+  .intro-icon{width:48px;height:48px;border-radius:14px;background:#e0f2fe;display:grid;place-items:center;font-size:24px;flex-shrink:0}
+  .intro h2{font-size:16px;font-weight:700}
+  .intro p{font-size:14px;color:var(--muted);margin-top:2px}
+  .filters{display:flex;gap:10px;margin:22px 0 16px;flex-wrap:wrap;justify-content:center}
+  .filter-btn{padding:10px 18px;border-radius:999px;border:2px solid #e2e8f0;background:white;font-weight:700;font-size:14px;cursor:pointer;transition:.15s}
+  .filter-btn.active{background:var(--text);color:white;border-color:var(--text)}
+  .filter-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e2e8f0;display:flex;flex-direction:column;transition:.2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.11)}
+  .card-head{padding:20px 20px 16px;display:flex;gap:14px;align-items:center}
+  .num{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;color:white;font-weight:900;font-size:26px;flex-shrink:0;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+  .num-12{background:linear-gradient(135deg,var(--blue),var(--blue-dark))}
+  .num-17{background:linear-gradient(135deg,var(--green),var(--green-dark))}
+  .num-580{background:linear-gradient(135deg,var(--orange),var(--orange-dark))}
+  .card-head h3{font-size:18px;font-weight:800}
+  .card-head p{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .tag{font-size:11px;font-weight:700;padding:4px 8px;border-radius:999px;background:#f1f5f9;color:#475569;letter-spacing:.03em}
+  .tag.pages{background:#fef3c7;color:#92400e}
+  .preview{margin:0 16px;height:160px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;display:grid;place-items:center;position:relative;overflow:hidden}
+  .preview::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px)}
+  .preview-inner{text-align:center}
+  .preview-icon{font-size:36px}
+  .preview p{font-size:13px;color:var(--muted);margin-top:6px;font-weight:600}
+  .card-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .btn{width:100%;padding:14px 16px;border-radius:14px;border:none;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+  .btn-primary{color:white;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .btn-12{background:var(--blue)} .btn-12:hover{background:var(--blue-dark)}
+  .btn-17{background:var(--green)} .btn-17:hover{background:var(--green-dark)}
+  .btn-580{background:var(--orange)} .btn-580:hover{background:var(--orange-dark)}
+  .btn-secondary{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+  .btn-secondary:hover{background:#e2e8f0}
+  .btn:active{transform:scale(.98)}
+  .help{margin-top:26px;background:white;border-radius:var(--radius);padding:20px;border:1px solid #e2e8f0}
+  .help h3{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;gap:8px;align-items:center}
+  .help ul{list-style:none;display:grid;gap:8px}
+  .help li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start}
+  .help li span{width:28px;height:28px;background:#f1f5f9;border-radius:999px;display:grid;place-items:center;flex-shrink:0;font-size:14px}
+  footer{margin-top:28px;text-align:center;padding:20px;color:var(--muted);font-size:13px}
+  footer a{color:var(--blue-dark);font-weight:700;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:12px;z-index:50}
+  .modal.open{display:flex}
+  .modal-box{background:white;width:min(100%,1000px);height:min(92vh,820px);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e8f0;background:#f8fafc}
+  .modal-head h4{font-size:15px;font-weight:800;display:flex;gap:10px;align-items:center}
+  .modal-head .actions{display:flex;gap:8px;align-items:center}
+  .icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid #e2e8f0;background:white;display:grid;place-items:center;cursor:pointer;font-size:18px}
+  .icon-btn:hover{background:#f1f5f9}
+  .modal-body{flex:1;background:#f1f5f9}
+  .modal-body iframe{width:100%;height:100%;border:none;background:white}
+  .fallback{padding:24px;text-align:center}
+  .fallback a{color:var(--blue-dark);font-weight:800}
+  @media(max-width:640px){.intro{flex-direction:column;text-align:center}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge-top">🚌 Salon Bus • La Métropole Mobilité</div>
+  <h1>Bus Lançon <span>de Provence</span></h1>
+  <p class="subtitle">Horaires officiels consultables à tout moment — simple, rapide, pour toute la famille</p>
+  <div class="meta"><span>📄 3 lignes PDF</span><span>⚡ Hors-ligne</span><span>📱 PWA installable</span></div>
+</header>
+
+<main class="container">
+  <div class="intro">
+    <div class="intro-icon">👨‍👩‍👧‍👦</div>
+    <div>
+      <h2>Consultation facile pour tes enfants</h2>
+      <p>Tape sur une ligne pour voir les horaires en grand. Boutons larges, lisible sur téléphone. PDFs officiels à jour — septembre 2026.</p>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag" style="background:#dcfce7;color:#166534">✓ PDFs officiels</span>
+      <span class="tag">Maj: 05/09/2026</span>
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">Tous • 3 lignes</button>
+    <button class="filter-btn" data-filter="12">Ligne 12</button>
+    <button class="filter-btn" data-filter="17">Ligne 17</button>
+    <button class="filter-btn" data-filter="580">Ligne 580</button>
+  </div>
+
+  <div class="grid" id="grid">
+    <!-- Ligne 12 -->
+    <article class="card" data-line="12">
+      <div class="card-head">
+        <div class="num num-12">12</div>
+        <div>
+          <h3>Ligne 12</h3>
+          <p>SALON — LANÇON</p>
+          <div class="tags"><span class="tag">Salon Bus</span><span class="tag pages">2 pages</span></div>
+        </div>
+      </div>
+      <div class="preview"><div class="preview-inner"><div class="preview-icon">📅</div><p>Horaires Salon ↔ Lançon</p><small style="color:#94a3b8">PDF A4 paysage</small></div></div>
+      <div class="card-body">
+        <button class="btn btn-primary btn-12" onclick="openPdf('pdfs/ligne-12.pdf','Ligne 12 • Salon – Lançon')">👁️ Voir les horaires</button>
+        <a class="btn btn-secondary" href="pdfs/ligne-12.pdf" download>⬇️ Télécharger PDF</a>
+      </div>
+    </article>
+
+    <!-- Ligne 17 -->
+    <article class="card" data-line="17">
+      <div class="card-head">
+        <div class="num num-17">17</div>
+        <div>
+          <h3>Ligne 17</h3>
+          <p>SALON / LANÇON / ROGNAC / VITROLLES / AÉROPORT</p>
+          <div class="tags"><span class="tag">Salon Bus</span><span class="tag pages">2 pages</span><span class="tag" style="background:#dbeafe;color:#1e40af">✈️ Aéroport</span></div>
+        </div>
+      </div>
+      <div class="preview"><div class="preview-inner"><div class="preview-icon">✈️</div><p>Salon ↔ Aéroport via Lançon</p><small style="color:#94a3b8">Rognac • Vitrolles</small></div></div>
+      <div class="card-body">
+        <button class="btn btn-primary btn-17" onclick="openPdf('pdfs/ligne-17.pdf','Ligne 17 • Salon – Aéroport')">👁️ Voir les horaires</button>
+        <a class="btn btn-secondary" href="pdfs/ligne-17.pdf" download>⬇️ Télécharger PDF</a>
+      </div>
+    </article>
+
+    <!-- Ligne 580 -->
+    <article class="card" data-line="580">
+      <div class="card-head">
+        <div class="num num-580">580</div>
+        <div>
+          <h3>Ligne 580</h3>
+          <p>LA FARE — SALON</p>
+          <div class="tags"><span class="tag">Salon Bus</span><span class="tag pages">1 page</span></div>
+        </div>
+      </div>
+      <div class="preview"><div class="preview-inner"><div class="preview-icon">🏫</div><p>La Fare-les-Oliviers ↔ Salon</p><small style="color:#94a3b8">PDF A4 paysage</small></div></div>
+      <div class="card-body">
+        <button class="btn btn-primary btn-580" onclick="openPdf('pdfs/ligne-580.pdf','Ligne 580 • La Fare – Salon')">👁️ Voir les horaires</button>
+        <a class="btn btn-secondary" href="pdfs/ligne-580.pdf" download>⬇️ Télécharger PDF</a>
+      </div>
+    </article>
+  </div>
+
+  <section class="help">
+    <h3>💡 Comment utiliser ? <small style="font-weight:600;color:var(--muted)">pour les enfants</small></h3>
+    <ul>
+      <li><span>1️⃣</span><div><b>Choisis ta ligne</b> — 12 pour Lançon↔Salon, 17 pour l'aéroport, 580 pour La Fare</div></li>
+      <li><span>2️⃣</span><div><b>Tape "Voir les horaires"</b> — le PDF s'ouvre en grand, tu peux zoomer et scroller</div></li>
+      <li><span>3️⃣</span><div><b>Pas d'internet ?</b> Installe l'app : menu du navigateur → "Installer l'app" → fonctionne hors-ligne</div></li>
+    </ul>
+  </section>
+
+  <footer>
+    PDFs officiels <a href="https://www.lametropolemobilite.fr" target="_blank" rel="noopener">La Métropole Mobilité</a> • Salon Bus • Généré le 05/09/2026<br>
+    Page créée pour la famille — <a href="https://github.com/sajomtech-commits">sajomtech-commits</a> • <a href="#" onclick="installPrompt && installPrompt.prompt()">📲 Installer comme app</a>
+  </footer>
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closePdf()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h4 id="modal-title">📄 Horaires</h4>
+      <div class="actions">
+        <a id="modal-download" href="#" download class="icon-btn" title="Télécharger" style="text-decoration:none">⬇️</a>
+        <a id="modal-open" href="#" target="_blank" class="icon-btn" title="Ouvrir dans nouvel onglet" style="text-decoration:none">↗️</a>
+        <button class="icon-btn" onclick="closePdf()" title="Fermer">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+let installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
+
+const filters=document.querySelectorAll('.filter-btn');
+const cards=document.querySelectorAll('.card');
+filters.forEach(b=>b.addEventListener('click',()=>{
+  filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  const f=b.dataset.filter;
+  cards.forEach(c=>{c.style.display=(f==='all'||c.dataset.line===f)?'flex':'none'})
+}));
+
+function openPdf(url,title){
+  document.getElementById('modal-title').textContent='📄 '+title;
+  document.getElementById('modal-download').href=url;
+  document.getElementById('modal-open').href=url;
+  const body=document.getElementById('modal-body');
+  body.innerHTML=`<iframe src="${url}#view=FitH" allow="fullscreen"></iframe><div class="fallback" style="display:none">Si le PDF ne s'affiche pas, <a href="${url}" target="_blank">ouvre-le ici</a></div>`;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  // fallback check for mobile
+  setTimeout(()=>{
+    const iframe=body.querySelector('iframe');
+    // if iframe fails, show fallback (heuristic)
+    if(!iframe.contentDocument && /iPhone|iPad|iPod/.test(navigator.userAgent)){
+      // keep iframe, iOS will handle
+    }
+  },800);
+}
+function closePdf(){
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-body').innerHTML='';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePdf()});
+
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
+</body>
+</html>
