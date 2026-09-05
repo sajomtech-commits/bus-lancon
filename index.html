@@ -124,15 +124,36 @@ document.getElementById('goBtn').onclick=()=>{
   el.classList.add('show');
 };
 document.getElementById('geoBtn').onclick=()=>{
-  if(!navigator.geolocation) return;
+  const btn=document.getElementById('geoBtn');
+  const orig=btn.textContent;
+  if(!navigator.geolocation){alert('Géoloc non supportée');return}
+  btn.textContent='…'; btn.disabled=true;
   navigator.geolocation.getCurrentPosition(p=>{
-    const lat=p.coords.latitude;
-    const target = lat>43.61 ? "GR PEM Quai 5" : "Mourguettes";
-    const opts=[...stopSelect.options].map(o=>o.value);
-    const found=opts.find(v=>v.includes(target))||opts[0];
-    stopSelect.value=found;
-    document.getElementById('goBtn').click();
-  });
+    const {latitude:lat, longitude:lon, accuracy:acc}=p.coords;
+    // haversine précis vers l'arrêt le plus proche (tous arrêts ont geo)
+    function dist(a,b){const R=6371;const dLat=(b[0]-a[0])*Math.PI/180;const dLon=(b[1]-a[1])*Math.PI/180;const aa=Math.sin(dLat/2)**2+Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(aa));}
+    const allStops=[];
+    Object.values(DATA).forEach(dirs=>Object.values(dirs).forEach(dir=>{if(dir) dir.stops.forEach(s=>{if(s.geo) allStops.push(s)})}));
+    let best=null, bestD=Infinity;
+    allStops.forEach(s=>{const d=dist([lat,lon], s.geo); if(d<bestD){bestD=d; best=s;}});
+    // Destination auto: si proche Salon → destination Lançon, sinon Salon
+    const isSalon = best && best.nom.toLowerCase().includes('salon');
+    const dest = isSalon ? 'Lançon' : 'Salon';
+    if(best){
+      stopSelect.value=best.nom;
+      // feedback précis
+      document.getElementById('goBtn').click();
+      const res=document.getElementById('result');
+      const note=document.createElement('div');
+      note.style.cssText='margin-top:8px;font-size:11px;opacity:.7';
+      note.textContent=`📍 ${best.nom} à ${bestD.toFixed(2)}km (précision ${Math.round(acc)}m) → direction ${dest}`;
+      res.appendChild(note);
+    }
+    btn.textContent=orig; btn.disabled=false;
+  }, err=>{
+    alert('Géoloc refusée ou erreur: '+err.message+' (autorise en HTTPS)');
+    btn.textContent=orig; btn.disabled=false;
+  }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
 };
 
 // Détails lignes
