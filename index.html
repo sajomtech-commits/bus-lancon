@@ -83,39 +83,20 @@ button.ghost{background:#fff;color:#111}
 </div>
 
 <script>
-const DATA={
-"12":{
-  "aller":{"direction":"Salon → Lançon","stops":[
-    {"nom":"Salon · PEM Quai 5","times":["06:00","07:00","07:30","08:00",null,null,"09:30","10:30","11:30",null,"12:30","13:00","13:30","14:00","14:30","15:30","16:30","17:00","17:30","18:05","18:30","19:15"]},
-    {"nom":"Salon · Foch","times":["06:02","07:02","07:33","08:03","08:33","09:02","09:32","10:32","11:32","12:03","12:32","13:02","13:32","14:02","14:32","15:32","16:33","17:03","17:33","18:08","18:32","19:17"]},
-    {"nom":"Lançon · Mourguettes","times":["06:11","07:11","07:43","08:13","08:43","09:11","09:41","10:41","11:41","12:14","12:41","13:11","13:41","14:11","14:41","15:41","16:44","17:14","17:44","18:19","18:41","19:26"]},
-    {"nom":"Lançon · Marcel Pagnol","times":["06:17","07:17","07:49","08:19","08:49","09:17","09:47","10:47","11:47","12:20","12:47","13:17","13:47","14:17","14:47","15:47","16:50","17:20","17:50","18:25","18:47","19:32"]}
-  ]},
-  "retour":{"direction":"Lançon → Salon","stops":[
-    {"nom":"Lançon · Marcel Pagnol","times":["06:44","06:34","07:30","08:00","08:33","09:03","10:03","11:03","11:33","12:00","12:33","13:03","13:33","14:03","15:03","16:00","16:30","17:00","17:30","18:00","18:34","19:34"]},
-    {"nom":"Lançon · Mourguettes","times":["06:47","06:37","07:33","08:03","08:36","09:06","10:06","11:06","11:36","12:03","12:36","13:06","13:36","14:06","15:06","16:03","16:33","17:03","17:33","18:03","18:37","19:37"]},
-    {"nom":"Salon · PEM Quai 5","times":["07:00","06:50","07:50","08:20","08:53","09:20","10:20","11:20","11:50","12:20","12:50","13:20","13:50","14:20","15:20","16:20","16:50","17:20","17:50","18:20","18:50","19:50"]}
-  ]}
-},
-"17":{
-  "aller":{"direction":"Salon → Aéroport","stops":[
-    {"nom":"Salon · PEM Quai 8","times":["05:30","06:30","08:30","09:30","11:30","12:30","14:30","15:30","17:30","18:30"]},
-    {"nom":"Lançon · Mourguettes","times":["05:41","06:46","08:41","09:41","11:46","12:46","14:41","15:41","17:46","18:46"]},
-    {"nom":"Aéroport","times":["06:30","07:46","09:30","10:30","12:46","13:46","15:30","16:30","18:46","19:46"]}
-  ]}
-},
-"530":{
-  "aller":{"direction":"Scolaire","stops":[
-    {"nom":"Salon · Trophées","times":["16:10","17:25","18:15"]},
-    {"nom":"Lançon · Sibourg","times":["16:45","17:59","18:49"]}
-  ]}
+let DATA={};
+async function loadData(){
+  const res=await fetch('horaires.json',{cache:'no-store'});
+  DATA=await res.json();
+  const stopsList=[...new Set(Object.values(DATA).flatMap(v=>Object.values(v).filter(Boolean).flatMap(d=>d.stops.map(s=>s.nom))))].sort();
+  const stopSelect=document.getElementById('stopSelect');
+  stopSelect.innerHTML='';
+  stopsList.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;stopSelect.appendChild(o)});
+  // default Salon
+  const def=stopsList.find(n=>n.includes('GR PEM Quai 5'))||stopsList[0];
+  stopSelect.value=def;
 }
-};
-
-const stopsList=[...new Set(Object.values(DATA).flatMap(v=>Object.values(v).filter(Boolean).flatMap(d=>d.stops.map(s=>s.nom))))];
+loadData();
 const stopSelect=document.getElementById('stopSelect');
-stopsList.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;stopSelect.appendChild(o)});
-stopSelect.value="Salon · PEM Quai 5";
 const timeInput=document.getElementById('timeInput');
 function setNow(){timeInput.value=new Date().toTimeString().slice(0,5)};setNow();
 document.getElementById('nowBtn').onclick=setNow;
@@ -146,8 +127,10 @@ document.getElementById('geoBtn').onclick=()=>{
   if(!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(p=>{
     const lat=p.coords.latitude;
-    // Salon lat 43.64 -> Salon, sinon Lançon
-    stopSelect.value = lat>43.61 ? "Salon · PEM Quai 5" : "Lançon · Mourguettes";
+    const target = lat>43.61 ? "GR PEM Quai 5" : "Mourguettes";
+    const opts=[...stopSelect.options].map(o=>o.value);
+    const found=opts.find(v=>v.includes(target))||opts[0];
+    stopSelect.value=found;
     document.getElementById('goBtn').click();
   });
 };
