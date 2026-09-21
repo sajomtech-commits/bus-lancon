@@ -94,6 +94,15 @@ input:focus,select:focus{outline:2px solid #93c5fd;outline-offset:1px}
 .pdfbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;border:1px solid #d5deea;background:#fff;font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none}
 .pdfbtn:hover{border-color:var(--ink)}
 
+/* ---------- Visionneuse PDF interne (évite de rester bloqué) ---------- */
+.pdf-overlay{position:fixed;inset:0;background:#fff;z-index:60;display:none;flex-direction:column}
+.pdf-overlay.open{display:flex}
+.pdf-head{display:flex;align-items:center;gap:8px;padding:10px 10px;background:var(--ink);color:#fff;flex-shrink:0}
+.pdf-head .title{flex:1;font-size:14px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pdf-head .btn{background:rgba(255,255,255,.14);color:#fff;padding:9px 14px;font-size:13.5px;border-radius:12px}
+.pdf-head .btn:active{background:rgba(255,255,255,.3)}
+.pdf-frame{flex:1;border:none;width:100%;background:#eef2f7}
+
 /* ---------- Pied ---------- */
 footer{max-width:600px;margin:0 auto;padding:26px 14px 8px;font-size:11.5px;color:var(--muted)}
 footer a{color:var(--muted)}
@@ -137,6 +146,16 @@ footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
   <div id="lines"></div>
 
   <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:18px">Fonctionne hors-ligne · Ajoute l’app à ton écran d’accueil</p>
+</div>
+
+<!-- ===== Visionneuse PDF interne ===== -->
+<div class="pdf-overlay" id="pdfOverlay" aria-hidden="true">
+  <div class="pdf-head">
+    <button class="btn" id="pdfClose" aria-label="Retour à l'app">← Retour</button>
+    <span class="title" id="pdfTitle">Horaires officiels</span>
+    <button class="btn" id="pdfExternal" aria-label="Ouvrir dans le navigateur">↗</button>
+  </div>
+  <iframe class="pdf-frame" id="pdfFrame" title="Horaires PDF officiels"></iframe>
 </div>
 
 <footer>
@@ -282,7 +301,7 @@ function renderNext(){
     if(next.length){
       wrap.innerHTML=`<div class="none">Plus de bus aujourd’hui (${label}) à cet arrêt.<br>Premier bus : <b>${next[0].time}</b> (ligne ${next[0].line}) — demain matin.</div>`;
     }else{
-      wrap.innerHTML=`<div class="none">Pas de bus prévu aujourd’hui (${label}) vers ${TOWN[dest]} depuis cet arrêt.<br><a href="./pdfs/ligne-530.pdf" style="color:#9a3412">📄 Vérifie le PDF scolaire (ligne 530)</a>.</div>`;
+      wrap.innerHTML=`<div class="none">Pas de bus prévu aujourd’hui (${label}) vers ${TOWN[dest]} depuis cet arrêt.<br><a href="#" class="js-pdf" data-pdf="./pdfs/ligne-530.pdf" style="color:#9a3412">📄 Vérifie le PDF scolaire (ligne 530)</a>.</div>`;
     }
     return;
   }
@@ -380,8 +399,8 @@ function renderLines(){
 }
 function pdfLinks(n,L){
   const out=[];
-  if(L.pdfs.aller) out.push(`<a class="pdfbtn" href="${L.pdfs.aller}" target="_blank" rel="noopener">📄 PDF aller</a>`);
-  if(L.pdfs.retour) out.push(`<a class="pdfbtn" href="${L.pdfs.retour}" target="_blank" rel="noopener">📄 PDF retour</a>`);
+  if(L.pdfs.aller) out.push(`<button class="pdfbtn js-pdf" data-pdf="${L.pdfs.aller}" type="button">📄 PDF aller</button>`);
+  if(L.pdfs.retour) out.push(`<button class="pdfbtn js-pdf" data-pdf="${L.pdfs.retour}" type="button">📄 PDF retour</button>`);
   return out.join('');
 }
 let sheetProfile = null; // profil choisi dans les fiches lignes (null = le jour actuel)
@@ -438,6 +457,40 @@ $('stopSelect').onchange=()=>{stopKeySel=$('stopSelect').value;renderNext();};
 $('destSalon').onclick=()=>setDest('SALON');
 $('destLancon').onclick=()=>setDest('LANCON');
 $('geoBtn').onclick=locate;
+
+/* ================= Visionneuse PDF interne =================
+   Ouvre le PDF dans l'app (overlay) avec un bouton « Retour » :
+   évite de rester bloqué dans le viewer PDF sans bouton retour
+   (problème des PWA installées où la barre du navigateur est cachée). */
+const pdfOverlay=$('pdfOverlay');
+const pdfFrame=$('pdfFrame');
+function openPdf(src){
+  pdfFrame.setAttribute('src',src);
+  pdfOverlay.classList.add('open');
+  pdfOverlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  history.pushState({pdf:true},'');
+}
+function closePdf(){
+  pdfOverlay.classList.remove('open');
+  pdfOverlay.setAttribute('aria-hidden','true');
+  pdfFrame.removeAttribute('src'); // réinitialise le viewer
+  document.body.style.overflow='';
+}
+$('pdfClose').onclick=closePdf;
+$('pdfExternal').onclick=()=>{
+  const src=pdfFrame.getAttribute('src');
+  if(src) window.open(src,'_blank','noopener');
+};
+// Bouton retour Android / geste retour iOS : ferme l'overlay au lieu de quitter l'app
+window.addEventListener('popstate',()=>{
+  if(pdfOverlay.classList.contains('open')) closePdf();
+});
+// Délégation : tous les éléments .js-pdf ouvrent la visionneuse interne
+document.addEventListener('click',(e)=>{
+  const t=e.target.closest('.js-pdf');
+  if(t){e.preventDefault();openPdf(t.dataset.pdf);}
+});
 
 loadData();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
