@@ -2,207 +2,445 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lançon Bus — 12 · 17 · 530</title>
-<meta name="theme-color" content="#111">
+<meta name="description" content="Le prochain bus vers Salon-de-Provence ou Lançon-de-Provence — lignes 12, 17 et 530 (La Métropole Mobilité).">
+<meta name="theme-color" content="#0b1220">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230b1220'/><text x='50' y='72' font-size='62' text-anchor='middle'>🚌</text></svg>">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,Helvetica,Arial,sans-serif;background:#fff;color:#111}
-header{max-width:560px;margin:0 auto;padding:24px 16px 12px;text-align:center}
-header h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
-header p{font-size:13px;color:#888;margin-top:4px}
-.container{max-width:560px;margin:0 auto;padding:0 12px 24px}
-.card{border:1px solid #e8e8e8;border-radius:16px;padding:16px;margin-top:12px}
-.card h2{font-size:14px;font-weight:700;margin-bottom:12px}
-label{font-size:11px;font-weight:700;color:#888;letter-spacing:.04em;text-transform:uppercase}
-.row{display:flex;gap:8px;margin-top:6px}
-select,input{flex:1;padding:12px;border:1px solid #ddd;border-radius:12px;background:#fff;font:inherit;font-size:15px}
-button{padding:12px 16px;border-radius:12px;border:1px solid #111;background:#111;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
-button.ghost{background:#fff;color:#111}
-.result{margin-top:12px;padding:14px;border-radius:12px;background:#111;color:#fff;display:none}
-.result.show{display:block}
-.result .big{font-size:18px;font-weight:800}
-.big-buttons{display:grid;gap:8px;margin-top:12px}
-.line-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px;border:1px solid #e8e8e8;border-radius:16px;background:#fff;cursor:pointer}
-.line-btn.active{background:#111;color:#fff;border-color:#111}
-.line-btn strong{font-size:20px}
-.line-btn span{font-size:12px;color:#888}
-.line-btn.active span{color:#aaa}
-.tabs{display:flex;gap:6px;margin:12px 0 8px}
-.tab{flex:1;padding:8px;border-radius:999px;border:1px solid #ddd;background:#fff;font-size:13px;font-weight:600;cursor:pointer;text-align:center}
-.tab.active{background:#111;color:#fff;border-color:#111}
-.times{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
-.time{flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid #e8e8e8;background:#fff;font-size:14px;font-variant-numeric:tabular-nums}
-.time.next{background:#111;color:#fff;border-color:#111}
-.stop{margin-top:14px}
-.stop-name{font-size:13px;font-weight:700;margin-bottom:6px}
-.muted{font-size:12px;color:#888;text-align:center;margin-top:16px}
+:root{
+  --bg:#f2f6fb; --card:#ffffff; --ink:#0b1220; --muted:#64748b;
+  --c12:#0a7d32; --c17:#14532d; --c530:#ea580c;
+  --ok:#16a34a; --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+.wrap{max-width:600px;margin:0 auto;padding:0 14px 48px}
+
+/* ---------- Entête ---------- */
+header{display:flex;align-items:center;gap:12px;padding:20px 4px 6px}
+.bus-ico{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#0b1220,#1e3a5f);display:grid;place-items:center;font-size:24px;flex-shrink:0}
+header h1{font-size:21px;font-weight:900;letter-spacing:-.02em}
+header p{font-size:12.5px;color:var(--muted)}
+.updated{font-size:11px;color:var(--muted);margin:2px 6px 10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.updated .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
+
+/* ---------- Cartes ---------- */
+.card{background:var(--card);border:1px solid #e3eaf3;border-radius:var(--radius);padding:16px;margin-top:12px;box-shadow:0 1px 2px rgba(11,18,32,.04)}
+.card h2{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
+.stepnum{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:800;margin-right:8px}
+
+/* Arrêt */
+.place-row{display:flex;gap:8px;margin-top:8px}
+select,input{flex:1;min-width:0;padding:13px 12px;border:1px solid #d5deea;border-radius:14px;background:#fff;font:inherit;font-size:15px;color:var(--ink)}
+input:focus,select:focus{outline:2px solid #93c5fd;outline-offset:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 16px;border:none;border-radius:14px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;transition:transform .05s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:#eef3f9;color:var(--ink)}
+.btn.geo{background:#fff;border:1.5px dashed #94a3b8;color:var(--ink)}
+.btn.geo.found{border-style:solid;border-color:var(--ok);background:#f0fdf4}
+
+/* Destination */
+.dest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.dest{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:16px;border:2px solid #d5deea;background:#fff;font:inherit;cursor:pointer;text-align:left}
+.dest.salon{border-color:#bae6fd;background:#f0f9ff}
+.dest.lancon{border-color:#bbf7d0;background:#f0fdf4}
+.dest .big{font-size:16px;font-weight:800}
+.dest .sub{font-size:11.5px;color:var(--muted)}
+.dest.sel{border-width:3px}
+.dest.sel.salon{border-color:#0284c7;background:#e0f2fe}
+.dest.sel.lancon{border-color:#16a34a;background:#dcfce7}
+
+/* Résultat */
+#result{margin-top:12px}
+.nbus{background:var(--ink);border-radius:16px;padding:14px;margin-top:8px;color:#fff}
+.nbus .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.nbus .line-badge{font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;color:#fff;letter-spacing:.03em}
+.nbus .timeh{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}
+.nbus .soon{font-size:13px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.14);font-weight:700}
+.nbus .dest{font-size:13.5px;color:#cbd5e1;margin-top:6px}
+.nbus.next{border:2px solid #fbbf24}
+.nbus.next .soon{background:#fbbf24;color:#111}
+.none{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:16px;margin-top:8px;font-size:14px;color:#9a3412}
+
+/* ---------- Lignes ---------- */
+.line-row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:15px;border:none;border-radius:16px;background:#fff;border:1.5px solid #e3eaf3;cursor:pointer;font:inherit;text-align:left;margin-top:10px}
+.line-row .num{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;flex-shrink:0}
+.line-row .txt{flex:1;min-width:0}
+.line-row .txt b{font-size:16px;display:block}
+.line-row .txt span{font-size:12px;color:var(--muted);display:block}
+.line-row .chev{color:#94a3b8;font-size:20px}
+.note-travaux{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:8px 12px;font-size:12.5px;margin-top:8px}
+
+.detail{display:none;margin-top:10px}
+.detail.open{display:block}
+.tabs{display:flex;gap:6px;margin-bottom:6px}
+.tab{flex:1;padding:9px;border-radius:999px;border:1px solid #d5deea;background:#fff;font-size:13px;font-weight:700;cursor:pointer;text-align:center;color:var(--muted)}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.daychip{display:inline-flex;gap:4px;margin:4px 0 8px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.daychip .c{padding:4px 10px;border-radius:999px;border:1.5px solid #d5deea;cursor:pointer;background:#fff}
+.daychip .c.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stopsheet{max-height:420px;overflow:auto;border:1px solid #e3eaf3;border-radius:14px}
+.stoprow{padding:10px 12px;border-bottom:1px solid #eef2f7}
+.stoprow:last-child{border-bottom:none}
+.stopname{font-size:13px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.stopname .ville{font-size:11px;color:var(--muted);font-weight:600}
+.times{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.time{flex-shrink:0;padding:5px 10px;border-radius:999px;border:1px solid #e3eaf3;background:#fff;font-size:13px;font-variant-numeric:tabular-nums}
+.time.next{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:800}
+.pdfrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pdfbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;border:1px solid #d5deea;background:#fff;font-size:12.5px;font-weight:700;color:var(--ink);text-decoration:none}
+.pdfbtn:hover{border-color:var(--ink)}
+
+/* ---------- Pied ---------- */
+footer{max-width:600px;margin:0 auto;padding:26px 14px 8px;font-size:11.5px;color:var(--muted)}
+footer a{color:var(--muted)}
+footer .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
 </style>
 </head>
 <body>
-<header>
-  <h1>Lançon Bus</h1>
-  <p>12 · 17 · 530 — app épurée</p>
-</header>
+<div class="wrap">
+  <header>
+    <div class="bus-ico">🚌</div>
+    <div>
+      <h1>Lançon Bus</h1>
+      <p>Lignes 12 · 17 · 530 — Salon ↔ Lançon</p>
+    </div>
+  </header>
+  <div class="updated" id="updated"><span class="dot"></span><span id="updatedText">Chargement des horaires…</span></div>
 
-<div class="container">
-
-  <!-- APP -->
+  <!-- ===== Recherche : mon prochain bus ===== -->
   <div class="card">
-    <h2>Quel bus prendre ?</h2>
-    <label>Tu es où ?</label>
-    <div class="row">
-      <select id="stopSelect"></select>
-      <button class="ghost" id="geoBtn">📍</button>
+    <h2><span class="stepnum">1</span> Je suis à…</h2>
+    <div class="place-row">
+      <select id="stopSelect" aria-label="Choisis ton arrêt"></select>
+      <button class="btn geo" id="geoBtn" title="Me localiser">📍</button>
     </div>
-    <label style="margin-top:10px;display:block">Heure</label>
-    <div class="row">
-      <input type="time" id="timeInput">
-      <button class="ghost" id="nowBtn">Maintenant</button>
+    <h2 style="margin-top:14px"><span class="stepnum">2</span> Je vais à…</h2>
+    <div class="dest-grid">
+      <button class="dest salon" id="destSalon" data-dest="SALON">
+        <span class="big">🏙️ Salon-de-Provence</span>
+        <span class="sub">Collèges & lycées</span>
+      </button>
+      <button class="dest lancon" id="destLancon" data-dest="LANCON">
+        <span class="big">🏘️ Lançon-de-Provence</span>
+        <span class="sub">Retour à la maison</span>
+      </button>
     </div>
-    <div class="row" style="margin-top:10px">
-      <button style="flex:1" id="goBtn">Voir le prochain bus</button>
-    </div>
-    <div id="result" class="result"></div>
+    <div id="result"></div>
   </div>
 
-  <!-- LIGNES -->
-  <div class="big-buttons">
-    <button class="line-btn" data-line="12"><span><strong>12</strong><br><span>Salon ↔ Lançon</span></span><span>›</span></button>
-    <div class="card" id="detail-12" style="display:none"></div>
+  <!-- ===== Lignes ===== -->
+  <div id="lines"></div>
 
-    <button class="line-btn" data-line="17"><span><strong>17</strong><br><span>Salon ↔ Aéroport</span></span><span>›</span></button>
-    <div class="card" id="detail-17" style="display:none"></div>
-
-    <button class="line-btn" data-line="530"><span><strong>530</strong><br><span>Scolaire</span></span><span>›</span></button>
-    <div class="card" id="detail-530" style="display:none"></div>
-  </div>
-
-  <p class="muted">Fonctionne hors-ligne · Ajouter à l’écran d’accueil</p>
+  <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:18px">Fonctionne hors-ligne · Ajoute l’app à ton écran d’accueil</p>
 </div>
 
+<footer>
+  <div>Horaires officiels : <b>La Métropole Mobilité — Libébus (réseau Salon)</b>, à jour de <span id="period"></span>.</div>
+  <div class="row">
+    <a href="https://transport.data.gouv.fr/resources/39592" target="_blank" rel="noopener">Données GTFS (transport.data.gouv.fr)</a>
+    <a href="https://www.plan.lametropolemobilite.fr" target="_blank" rel="noopener">Planificateur La Métropole Mobilité</a>
+  </div>
+  <div style="margin-top:6px">École = jours d’école (académie Aix-Marseille, zone B). Vacances = autres jours de semaine.</div>
+</footer>
+
 <script>
-let DATA={};
+"use strict";
+/* ================= Données ================= */
+let DATA=null;
+const $=id=>document.getElementById(id);
+const TOWN={SALON:'Salon-de-Provence',LANCON:'Lançon-Provence'};
+const PROFILES=["ecole","vacances","samedi","dimanche"];
+let stopKeySel="";
+
+/* ================= Chargement ================= */
 async function loadData(){
-  const res=await fetch('horaires.json?v=4',{cache:'no-store'});
-  DATA=await res.json();
-  const stopsList=[...new Set(Object.values(DATA).flatMap(v=>Object.values(v).filter(Boolean).flatMap(d=>d.stops.map(s=>s.nom))))].sort();
-  const stopSelect=document.getElementById('stopSelect');
-  stopSelect.innerHTML='';
-  stopsList.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;stopSelect.appendChild(o)});
-  // default Salon
-  const def=stopsList.find(n=>n.includes('GR PEM Quai 5'))||stopsList[0];
-  stopSelect.value=def;
+  try{
+    const r=await fetch('./horaires.json',{cache:'no-store'});
+    DATA=await r.json();
+    init();
+  }catch(e){
+    $('updatedText').textContent='Impossible de charger les horaires (hors-ligne ?).';
+    $('updated').style.color='#b91c1c';
+  }
 }
-loadData();
-const stopSelect=document.getElementById('stopSelect');
-const timeInput=document.getElementById('timeInput');
-function setNow(){timeInput.value=new Date().toTimeString().slice(0,5)};setNow();
-document.getElementById('nowBtn').onclick=setNow;
-function toMin(t){const [h,m]=t.split(':').map(Number);return h*60+m}
-document.getElementById('goBtn').onclick=()=>{
-  const stop=stopSelect.value, t=timeInput.value||"16:30";
-  const min=toMin(t);
-  let best=null;
-  Object.entries(DATA).forEach(([line,dirs])=>{
-    Object.entries(dirs).forEach(([dirKey,dir])=>{
-      if(!dir) return;
-      const s=dir.stops.find(x=>x.nom===stop) || dir.stops[0];
-      const times=s.times.filter(Boolean);
-      const nxt=times.find(x=>toMin(x)>=min) || times[0];
-      const wait = times.find(x=>toMin(x)>=min) ? toMin(nxt)-min : null;
-      if(wait!==null && (best===null || wait<best.wait)) best={line,dir:dir.direction,stop:s.nom,time:nxt,wait};
+
+/* ================= Profil du jour ================= */
+function isSchoolDay(date){
+  const iso=date.toISOString().slice(0,10);
+  const hol=DATA.meta.holidaysZoneB||[];
+  if(hol.some(([a,b])=>iso>=a&&iso<=b)) return false;
+  const wd=date.getDay();
+  return wd>=1&&wd<=5;
+}
+function todayProfile(){
+  const d=new Date();
+  const wd=d.getDay();
+  if(wd===6) return 'samedi';
+  if(wd===0) return 'dimanche';
+  return isSchoolDay(d)?'ecole':'vacances';
+}
+
+/* ================= Arrêts ================= */
+function stopKey(entry){return entry.nom+'|'+entry.city;}
+function allStops(){
+  const map=new Map();
+  Object.values(DATA.lines).forEach(L=>{
+    Object.values(L.dirs).forEach(D=>{
+      D.stops.forEach(s=>{
+        if(!s.geo) return;
+        const k=stopKey(s);
+        if(!map.has(k)) map.set(k,{nom:s.nom,city:s.city,geo:s.geo});
+      });
     });
   });
-  const el=document.getElementById('result');
-  if(best){
-    el.innerHTML=`<div class="big">Ligne ${best.line} à ${best.time}</div><div style="opacity:.8;margin-top:4px">${best.dir} · départ ${best.stop} · dans ${best.wait} min</div>`;
-  } else {
-    el.innerHTML=`<div class="big">Aucun bus</div>`;
-  }
-  el.classList.add('show');
-};
-document.getElementById('geoBtn').onclick=()=>{
-  const btn=document.getElementById('geoBtn');
-  const orig=btn.textContent;
-  if(!navigator.geolocation){alert('Géoloc non supportée');return}
-  btn.textContent='…'; btn.disabled=true;
-  navigator.geolocation.getCurrentPosition(p=>{
-    const {latitude:lat, longitude:lon, accuracy:acc}=p.coords;
-    // haversine précis vers l'arrêt le plus proche (tous arrêts ont geo)
-    function dist(a,b){const R=6371;const dLat=(b[0]-a[0])*Math.PI/180;const dLon=(b[1]-a[1])*Math.PI/180;const aa=Math.sin(dLat/2)**2+Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(aa));}
-    const allStops=[];
-    Object.values(DATA).forEach(dirs=>Object.values(dirs).forEach(dir=>{if(dir) dir.stops.forEach(s=>{if(s.geo) allStops.push(s)})}));
-    let best=null, bestD=Infinity;
-    allStops.forEach(s=>{const d=dist([lat,lon], s.geo); if(d<bestD){bestD=d; best=s;}});
-    // Destination auto: si proche Salon → destination Lançon, sinon Salon
-    const isSalon = best && best.nom.toLowerCase().includes('salon');
-    const dest = isSalon ? 'Lançon' : 'Salon';
-    if(best){
-      stopSelect.value=best.nom;
-      // feedback précis
-      document.getElementById('goBtn').click();
-      const res=document.getElementById('result');
-      const note=document.createElement('div');
-      note.style.cssText='margin-top:8px;font-size:11px;opacity:.7';
-      note.textContent=`📍 ${best.nom} à ${bestD.toFixed(2)}km (précision ${Math.round(acc)}m) → direction ${dest}`;
-      res.appendChild(note);
-    }
-    btn.textContent=orig; btn.disabled=false;
-  }, err=>{
-    alert('Géoloc refusée ou erreur: '+err.message+' (autorise en HTTPS)');
-    btn.textContent=orig; btn.disabled=false;
-  }, {enableHighAccuracy:true, timeout:10000, maximumAge:0});
-};
-
-// Détails lignes
-document.querySelectorAll('.line-btn').forEach(btn=>{
-  btn.onclick=()=>{
-    const line=btn.dataset.line;
-    const detail=document.getElementById('detail-'+line);
-    const open=detail.style.display!=='none';
-    document.querySelectorAll('[id^=detail-]').forEach(d=>d.style.display='none');
-    document.querySelectorAll('.line-btn').forEach(b=>b.classList.remove('active'));
-    if(open){detail.style.display='none';return}
-    btn.classList.add('active');detail.style.display='block';
-    render(line,detail);
-  }
-});
-function render(line,el){
-  const dirs=DATA[line];
-  const hasRetour=!!dirs.retour;
-  let html='';
-  if(hasRetour){
-    html+=`<div class="tabs"><button class="tab active" data-dir="aller">Aller</button><button class="tab" data-dir="retour">Retour</button></div>`;
-  }
-  html+=`<div id="times-${line}"></div>`;
-  el.innerHTML=html;
-  if(hasRetour){
-    el.querySelectorAll('.tab').forEach(tab=>{
-      tab.onclick=()=>{
-        el.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
-        draw(line,tab.dataset.dir,el.querySelector(`#times-${line}`));
-      }
-    });
-  }
-  draw(line,'aller',el.querySelector(`#times-${line}`));
+  return [...map.values()];
 }
-function draw(line,dir,container){
-  const data=DATA[line][dir];
-  const now=timeInput.value||"16:30";
-  let html=`<div style="font-size:12px;color:#888;margin-bottom:8px">${data.direction}</div>`;
-  data.stops.forEach(s=>{
-    html+=`<div class="stop"><div class="stop-name">${s.nom}</div><div class="times">`;
-    s.times.filter(Boolean).forEach(t=>{
-      const cls = t===s.times.filter(Boolean).find(x=>toMin(x)>=toMin(now)) ? 'time next' : 'time';
-      html+=`<span class="${cls}">${t}</span>`;
+function fillStops(){
+  const sel=$('stopSelect');
+  const stops=allStops().sort((a,b)=>{
+    const rank=c=>c==='Salon-de-Provence'?0:c==='Lançon-Provence'?1:2;
+    if(rank(a.city)!==rank(b.city)) return rank(a.city)-rank(b.city);
+    return a.nom.localeCompare(b.nom,'fr');
+  });
+  const groups={};
+  stops.forEach(s=>{(groups[s.city]=groups[s.city]||[]).push(s);});
+  sel.innerHTML='';
+  Object.entries(groups).forEach(([city,list])=>{
+    const og=document.createElement('optgroup');
+    og.label=city;
+    list.forEach(s=>{
+      const o=document.createElement('option');
+      o.value=stopKey(s);
+      o.textContent=s.nom;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+}
+function selectStopByKey(k){
+  const sel=$('stopSelect');
+  const opt=[...sel.options].find(o=>o.value===k);
+  if(opt){sel.value=k;return true;}
+  return false;
+}
+function cityOfStopKey(k){const [n,c]=k.split('|');return c||'';}
+
+/* ================= Recherche du prochain bus ================= */
+function toMin(t){const [h,m]=t.split(':').map(Number);return h*60+m;}
+function nextBuses(stopKeyStr,dest,profile,nowMin){
+  const res=[];
+  Object.entries(DATA.lines).forEach(([line,L])=>{
+    Object.entries(L.dirs).forEach(([dirKey,D])=>{
+      const st=D.stops.find(s=>stopKey(s)===stopKeyStr);
+      if(!st) return;
+      const times=(st.profiles[profile]||[]);
+      times.forEach(x=>{
+        if(!x.to.includes(dest)) return;
+        const m=toMin(x.t);
+        if(m>=nowMin) res.push({line,dir:dirKey,time:x.t,min:m-nowMin,headsign:D.headsign});
+      });
+    });
+  });
+  res.sort((a,b)=>a.min-b.min||a.line.localeCompare(b.line));
+  return res.slice(0,4);
+}
+
+/* ================= Affichage résultat ================= */
+function fmtMin(m){
+  if(m<=0) return 'maintenant';
+  if(m===1) return 'dans 1 min';
+  return 'dans '+m+' min';
+}
+function lineName(n){
+  const L=DATA.lines[n];
+  return n==='12'?'Salon → Lançon':n==='17'?'Salon ↔ Aéroport':'Lançon → Salon (école)';
+}
+function renderNext(){
+  const dest=$('destSalon').classList.contains('sel')?'SALON':$('destLancon').classList.contains('sel')?'LANCON':null;
+  const profile=todayProfile();
+  const wrap=$('result');
+  if(!dest||!stopKeySel){
+    wrap.innerHTML='<div class="none">Choisis ton arrêt (1) et ta destination (2) 😊</div>';
+    return;
+  }
+  const city=cityOfStopKey(stopKeySel);
+  if(dest==='SALON'&&city==='Salon-de-Provence'||dest==='LANCON'&&city==='Lançon-Provence'){
+    wrap.innerHTML=`<div class="none">Tu es déjà à ${TOWN[dest]} 😄 — regarde la ligne pour aller vers l’autre ville.</div>`;
+    return;
+  }
+  const now=new Date();
+  const nowMin=now.getHours()*60+now.getMinutes();
+  const list=nextBuses(stopKeySel,dest,profile,nowMin);
+  if(!list.length){
+    const next=nextBuses(stopKeySel,dest,profile,0);
+    const label=DATA.meta.profiles[profile]||profile;
+    if(next.length){
+      wrap.innerHTML=`<div class="none">Plus de bus aujourd’hui (${label}) à cet arrêt.<br>Premier bus : <b>${next[0].time}</b> (ligne ${next[0].line}) — demain matin.</div>`;
+    }else{
+      wrap.innerHTML=`<div class="none">Pas de bus prévu aujourd’hui (${label}) vers ${TOWN[dest]} depuis cet arrêt.<br><a href="./pdfs/ligne-530.pdf" style="color:#9a3412">📄 Vérifie le PDF scolaire (ligne 530)</a>.</div>`;
+    }
+    return;
+  }
+  wrap.innerHTML='<div class="daychip"><span class="c on">Aujourd’hui : '+DATA.meta.profiles[profile]+'</span></div>'+
+    list.map((b,i)=>E_BUS(b,i)).join('');
+}
+function E_BUS(b,i){
+  const L=DATA.lines[b.line];
+  return `<div class="nbus ${i===0?'next':''}">
+    <div class="top">
+      <span class="line-badge" style="background:${L.color}">Ligne ${b.line}</span>
+      <span class="soon">${fmtMin(b.min)}</span>
+    </div>
+    <div class="timeh">${b.time}</div>
+    <div class="dest">Direction : ${b.headsign}${b.dir==='retour'?' (retour)':''}</div>
+  </div>`;
+}
+/* ================= Géolocalisation ================= */
+function haversine(a,b){
+  const R=6371,dLat=(b[0]-a[0])*Math.PI/180,dLon=(b[1]-a[1])*Math.PI/180;
+  const s=Math.sin(dLat/2)**2+Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(s));
+}
+function locate(){
+  const btn=$('geoBtn');
+  if(!navigator.geolocation){alert('La géolocalisation n’est pas disponible sur cet appareil.');return;}
+  btn.textContent='…';btn.disabled=true;btn.classList.remove('found');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude:lat,longitude:lon,accuracy:acc}=pos.coords;
+    const stops=allStops();
+    let best=null,bestD=Infinity;
+    stops.forEach(s=>{const d=haversine([lat,lon],s.geo);if(d<bestD){bestD=d;best=s;}});
+    if(best){
+      stopKeySel=stopKey(best);
+      selectStopByKey(stopKeySel);
+      btn.classList.add('found');
+      // Destination suggérée : l’autre ville
+      const suggested=best.city==='Salon-de-Provence'?'LANCON':best.city==='Lançon-Provence'?'SALON':null;
+      if(suggested) setDest(suggested);
+      renderNext();
+      const note=document.createElement('div');
+      note.style.cssText='font-size:11.5px;color:var(--muted);margin-top:8px';
+      note.textContent=`📍 Arrêt le plus proche : ${best.nom} (${TOWN[best.city]||best.city}) à ${bestD.toFixed(2)} km · précision ${Math.round(acc)} m`;
+      $('result').appendChild(note);
+    }
+    btn.textContent='📍';btn.disabled=false;
+  },err=>{
+    alert('Géolocalisation refusée ou impossible : '+err.message+' — autorise-la dans le navigateur (HTTPS requis).');
+    btn.textContent='📍';btn.disabled=false;
+  },{enableHighAccuracy:true,timeout:10000,maximumAge:0});
+}
+
+function setDest(d){
+  $('destSalon').classList.toggle('sel',d==='SALON');
+  $('destLancon').classList.toggle('sel',d==='LANCON');
+  renderNext();
+}
+
+/* ================= Fiches lignes ================= */
+function renderLines(){
+  const wrap=$('lines');
+  wrap.innerHTML=Object.entries(DATA.lines).map(([n,L])=>`
+    <button class="line-row" data-line="${n}" aria-expanded="false">
+      <span class="num" style="background:${L.color}">${n}</span>
+      <span class="txt"><b>${lineName(n)}</b><span>${L.name}</span></span>
+      <span class="chev">›</span>
+    </button>
+    <div class="detail" id="detail-${n}">
+      ${L.note?`<div class="note-travaux">🚧 ${L.note}</div>`:''}
+      <div class="tabs">${Object.keys(L.dirs).length>1?`<button class="tab active" data-d="aller">Aller</button><button class="tab" data-d="retour">Retour</button>`:'<button class="tab active" data-d="aller">Aller</button>'}</div>
+      <div id="sheet-${n}"></div>
+      <div class="pdfrow">
+        ${pdfLinks(n,L)} 
+        <a class="pdfbtn" href="${L.planUrl}" target="_blank" rel="noopener">🌐 Voir sur le planificateur</a>
+      </div>
+    </div>`).join('');
+  wrap.querySelectorAll('.line-row').forEach(btn=>{
+    btn.onclick=()=>{
+      const n=btn.dataset.line;
+      const d=$('detail-'+n);
+      const open=d.classList.contains('open');
+      document.querySelectorAll('.detail').forEach(x=>x.classList.remove('open'));
+      document.querySelectorAll('.line-row').forEach(b=>b.setAttribute('aria-expanded','false'));
+      if(!open){d.classList.add('open');btn.setAttribute('aria-expanded','true');drawSheet(n,'aller');}
+    };
+  });
+  wrap.querySelectorAll('.detail .tab').forEach(tab=>{
+    tab.onclick=()=>{
+      const d=tab.closest('.detail');
+      d.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      drawSheet(d.id.replace('detail-',''),tab.dataset.d);
+    };
+  });
+}
+function pdfLinks(n,L){
+  const out=[];
+  if(L.pdfs.aller) out.push(`<a class="pdfbtn" href="${L.pdfs.aller}" target="_blank" rel="noopener">📄 PDF aller</a>`);
+  if(L.pdfs.retour) out.push(`<a class="pdfbtn" href="${L.pdfs.retour}" target="_blank" rel="noopener">📄 PDF retour</a>`);
+  return out.join('');
+}
+let sheetProfile = null; // profil choisi dans les fiches lignes (null = le jour actuel)
+function drawLineSheet(n,dirKey,profile){
+  const D=DATA.lines[n].dirs[dirKey];
+  const container=$('sheet-'+n);
+  if(!D){container.innerHTML='<p style="font-size:12px;color:var(--muted)">Aucune donnée pour cette direction.</p>';return;}
+  const now=new Date().getHours()*60+new Date().getMinutes();
+  const activeProf = profile || todayProfile();
+  let html=`<div class="daychip">`;
+  PROFILES.forEach(p=>{const has=D.stops.some(s=>s.profiles[p]&&s.profiles[p].length); if(has) html+=`<span class="c ${p===activeProf?'on':''}" data-p="${p}">${DATA.meta.profiles[p]}</span>`;});
+  html+=`</div><div class="stopsheet">`;
+  D.stops.forEach(s=>{
+    const times=(s.profiles[activeProf]||[]).map(x=>x.t);
+    if(!times.length) return;
+    html+=`<div class="stoprow"><div class="stopname">${s.nom}<span class="ville">${s.city.split('-')[0]}</span></div><div class="times">`;
+    times.forEach(t=>{
+      const next = t===times.find(x=>toMin(x)>=now) ? 'time next':'time';
+      html+=`<span class="${next}">${t}</span>`;
     });
     html+=`</div></div>`;
   });
+  html+=`</div>`;
   container.innerHTML=html;
+  container.querySelectorAll('.daychip .c').forEach(chip=>{
+    chip.onclick=()=>{
+      sheetProfile=chip.dataset.p;
+      drawLineSheet(n,dirKey,sheetProfile);
+    };
+  });
 }
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+function drawSheet(n,dirKey){
+  drawLineSheet(n,dirKey,sheetProfile);
+}
+
+/* ================= Init ================= */
+function init(){
+  fillStops();
+  // arrêt par défaut : hub Salon
+  const h=DATA.hubs['Salon-de-Provence'];
+  if(h){const k=h.nom+'|Salon-de-Provence'; if(selectStopByKey(k)) stopKeySel=k; else {stopKeySel=$('stopSelect').value;}}
+  else stopKeySel=$('stopSelect').value;
+  setDest('LANCON');
+  $('updatedText').textContent='Horaires à jour de '+fmtDate(DATA.meta.generatedAt)+' — période '+DATA.meta.feedPeriod;
+  $('period').textContent=DATA.meta.feedPeriod;
+  renderLines();
+  renderNext();
+  // rafraîchissement minute
+  setInterval(()=>{renderNext();},30000);
+}
+function fmtDate(iso){const d=new Date(iso+'T12:00:00Z');return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+
+$('stopSelect').onchange=()=>{stopKeySel=$('stopSelect').value;renderNext();};
+$('destSalon').onclick=()=>setDest('SALON');
+$('destLancon').onclick=()=>setDest('LANCON');
+$('geoBtn').onclick=locate;
+
+loadData();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 </script>
 </body>
 </html>
