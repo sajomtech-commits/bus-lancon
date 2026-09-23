@@ -4,9 +4,10 @@
 
 PWA consultable sur téléphone : https://sajomtech-commits.github.io/bus-lancon/
 
-- **Ligne 12** — SALON ↔ LANÇON
-- **Ligne 17** — SALON ↔ LANÇON · ROGNAC · VITROLLES · AÉROPORT
-- **Ligne 530** — LANÇON ↔ SALON (scolaire)
+- **Ligne 12** — SALON ↔ LANÇON (Libébus)
+- **Ligne 17** — SALON ↔ LANÇON · ROGNAC · VITROLLES · AÉROPORT (Libébus)
+- **Ligne 25** — SALON ↔ AIX-EN-PROVENCE, arrêts Roi René (Salon) et Gare Routière (Aix) (Cartreize CG13)
+- **Ligne 530** — LANÇON ↔ SALON, scolaire (Libébus)
 
 ## Fonctionnalités
 
@@ -22,13 +23,20 @@ PWA consultable sur téléphone : https://sajomtech-commits.github.io/bus-lancon
 
 ## Sources des horaires (exactes)
 
-Les horaires sont **générés depuis le GTFS officiel Libébus** (réseau Salon de
-La Métropole Mobilité), publié sur le Point d'Accès National :
-<https://transport.data.gouv.fr/resources/39592>
+Les horaires sont **générés depuis les GTFS officiels**, publiés sur le Point
+d'Accès National :
 
-- Flux : `app.mecatran.com/utw/ws/gtfsfeed/static/mamp-lib` (clé publique affichée sur la page)
-- Lignes extraites : `LIB-12`, `LIB-17`, `LIB-530` — tous les arrêts avec coordonnées GPS
-  et ville, tous les temps de passage par arrêt/course, sens aller/retour.
+- **Libébus** (réseau Salon de La Métropole Mobilité) :
+  <https://transport.data.gouv.fr/resources/39592> — lignes `LIB-12`, `LIB-17`, `LIB-530`
+- **Cartreize (CG13, Bouches-du-Rhône)** :
+  <https://transport.data.gouv.fr/resources/39602> — ligne `C13-25` (SALON – AIX),
+  arrêts limités à Roi René (Salon) et Gare Routière (Aix) par choix de l'app.
+
+Tous les arrêts ont coordonnées GPS et ville ; les temps de passage sont exacts
+par arrêt/course et sens. Pour Cartreize (services par date), chaque course est
+classée par sa date réelle : les **vacances sont séparées par période**
+(été, Toussaint, Noël, février, Pâques, Ascension) afin d'éviter tout
+« bus fantôme » le 25 décembre par exemple.
 - `pdfs/` : PDFs officiels exportés depuis plan.lametropolemobilite.fr
   (`ligne-12.pdf`, `ligne-12-retour.pdf`, `ligne-17.pdf`, `ligne-530.pdf` — horaires annuels
   1er septembre 2026 → 3 juillet 2027 pour la 530 scolaire).
@@ -37,8 +45,8 @@ La Métropole Mobilité), publié sur le Point d'Accès National :
 ## Mettre à jour les horaires
 
 ```bash
-node scripts/build-data.mjs           # télécharge le GTFS frais et régénère horaires.json
-node scripts/build-data.mjs /chemin/gtfs_extrait   # ou depuis un GTFS déjà décompressé
+node scripts/build-data.mjs                                 # télécharge les GTFS frais (Libébus + Cartreize)
+node scripts/build-data.mjs /chemin/lib /chemin/c13        # ou depuis des GTFS déjà extraits
 ```
 
 Puis committer `horaires.json` (et, si besoin, télécharger les nouveaux PDFs dans `pdfs/`).

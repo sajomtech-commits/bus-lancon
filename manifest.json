@@ -1,7 +1,7 @@
 {
-  "name": "Lançon Bus — 12 · 17 · 530",
+  "name": "Lançon Bus — 12 · 17 · 25 · 530",
   "short_name": "Lançon Bus",
-  "description": "Le prochain bus vers Salon-de-Provence ou Lançon-de-Provence — lignes 12, 17 et 530 (La Métropole Mobilité). Horaires officiels hors-ligne, pour les enfants.",
+  "description": "Le prochain bus vers Salon-de-Provence, Lançon-de-Provence ou Aix-en-Provence — lignes 12, 17, 25 et 530 (Libébus + Cartreize). Horaires officiels hors-ligne, pour les enfants.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

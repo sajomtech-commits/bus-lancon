@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Lançon Bus — 12 · 17 · 530</title>
+<title>Lançon Bus — 12 · 17 · 25 · 530</title>
 <meta name="description" content="Le prochain bus vers Salon-de-Provence ou Lançon-de-Provence — lignes 12, 17 et 530 (La Métropole Mobilité).">
 <meta name="theme-color" content="#0b1220">
 <link rel="manifest" href="manifest.json">
@@ -47,11 +47,13 @@ input:focus,select:focus{outline:2px solid #93c5fd;outline-offset:1px}
 .dest{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:16px;border:2px solid #d5deea;background:#fff;font:inherit;cursor:pointer;text-align:left}
 .dest.salon{border-color:#bae6fd;background:#f0f9ff}
 .dest.lancon{border-color:#bbf7d0;background:#f0fdf4}
+.dest.aix{grid-column:1/-1;border-color:#ede9fe;background:#faf5ff}
 .dest .big{font-size:16px;font-weight:800}
 .dest .sub{font-size:11.5px;color:var(--muted)}
 .dest.sel{border-width:3px}
 .dest.sel.salon{border-color:#0284c7;background:#e0f2fe}
 .dest.sel.lancon{border-color:#16a34a;background:#dcfce7}
+.dest.sel.aix{border-color:#7c3aed;background:#f3e8ff}
 
 /* Résultat */
 #result{margin-top:12px}
@@ -79,7 +81,7 @@ input:focus,select:focus{outline:2px solid #93c5fd;outline-offset:1px}
 .tabs{display:flex;gap:6px;margin-bottom:6px}
 .tab{flex:1;padding:9px;border-radius:999px;border:1px solid #d5deea;background:#fff;font-size:13px;font-weight:700;cursor:pointer;text-align:center;color:var(--muted)}
 .tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.daychip{display:inline-flex;gap:4px;margin:4px 0 8px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.daychip{display:inline-flex;flex-wrap:wrap;gap:4px;margin:4px 0 8px;font-size:11.5px;font-weight:700;color:var(--muted)}
 .daychip .c{padding:4px 10px;border-radius:999px;border:1.5px solid #d5deea;cursor:pointer;background:#fff}
 .daychip .c.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .stopsheet{max-height:420px;overflow:auto;border:1px solid #e3eaf3;border-radius:14px}
@@ -116,7 +118,7 @@ footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
     <div class="bus-ico">🚌</div>
     <div>
       <h1>Lançon Bus</h1>
-      <p>Lignes 12 · 17 · 530 — Salon ↔ Lançon</p>
+      <p>Lignes 12 · 17 · 25 · 530 — Salon · Lançon · Aix</p>
     </div>
   </header>
   <div class="updated" id="updated"><span class="dot"></span><span id="updatedText">Chargement des horaires…</span></div>
@@ -137,6 +139,10 @@ footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
       <button class="dest lancon" id="destLancon" data-dest="LANCON">
         <span class="big">🏘️ Lançon-de-Provence</span>
         <span class="sub">Retour à la maison</span>
+      </button>
+      <button class="dest aix" id="destAix" data-dest="AIX">
+        <span class="big">🏛️ Aix-en-Provence</span>
+        <span class="sub">Ligne 25 — via Roi René</span>
       </button>
     </div>
     <div id="result"></div>
@@ -159,12 +165,13 @@ footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
 </div>
 
 <footer>
-  <div>Horaires officiels : <b>La Métropole Mobilité — Libébus (réseau Salon)</b>, à jour de <span id="period"></span>.</div>
+  <div>Horaires officiels : <b>Libébus (La Métropole Mobilité — 12 · 17 · 530)</b> et <b>Cartreize (CG13 — 25 Salon ↔ Aix)</b> · période <span id="period"></span>.</div>
   <div class="row">
-    <a href="https://transport.data.gouv.fr/resources/39592" target="_blank" rel="noopener">Données GTFS (transport.data.gouv.fr)</a>
-    <a href="https://www.plan.lametropolemobilite.fr" target="_blank" rel="noopener">Planificateur La Métropole Mobilité</a>
+    <a href="https://transport.data.gouv.fr/resources/39592" target="_blank" rel="noopener">Données GTFS Libébus</a>
+    <a href="https://transport.data.gouv.fr/resources/39602" target="_blank" rel="noopener">Données GTFS Cartreize</a>
+    <a href="https://www.lepilote.com" target="_blank" rel="noopener">Le Pilote (13)</a>
   </div>
-  <div style="margin-top:6px">École = jours d’école (académie Aix-Marseille, zone B). Vacances = autres jours de semaine.</div>
+  <div style="margin-top:6px">École = jours d’école (académie Aix-Marseille). Les vacances sont par période réelle (zone B), la 530 est scolaire.</div>
 </footer>
 
 <script>
@@ -172,8 +179,9 @@ footer .row a{text-decoration:none;border-bottom:1px dotted #94a3b8}
 /* ================= Données ================= */
 let DATA=null;
 const $=id=>document.getElementById(id);
-const TOWN={SALON:'Salon-de-Provence',LANCON:'Lançon-Provence'};
-const PROFILES=["ecole","vacances","samedi","dimanche"];
+const TOWN={SALON:'Salon-de-Provence',LANCON:'Lançon-Provence',AIX:'Aix-en-Provence'};
+// ordre d'affichage des profils dans les fiches lignes
+const PROFILE_ORDER=["ecole","vacances","ete2026","toussaint2026","noel2026","hiver2027","paques2027","ascension2027","ete2027","samedi","dimanche"];
 let stopKeySel="";
 
 /* ================= Chargement ================= */
@@ -201,8 +209,22 @@ function todayProfile(){
   const wd=d.getDay();
   if(wd===6) return 'samedi';
   if(wd===0) return 'dimanche';
-  return isSchoolDay(d)?'ecole':'vacances';
+  if(isSchoolDay(d)) return 'ecole';
+  // période de vacances réelle (zone B) si le réseau la distingue
+  const iso=d.toISOString().slice(0,10);
+  const per=(DATA.meta.holidayPeriods||[]).find(p=>iso>=p[1]&&iso<=p[2]);
+  return per?per[0]:'vacances';
 }
+// Certains réseaux (Libébus) n'ont qu'un profil « vacances » global :
+// on retombe dessus si la période nommée n'existe pas dans la ligne.
+function resolveProfile(line,profile){
+  const L=DATA.lines[line]; if(!L) return profile;
+  const has=p=>Object.values(L.dirs).some(D=>D.stops.some(s=>s.profiles[p]&&s.profiles[p].length));
+  if(has(profile)) return profile;
+  if(has('vacances')) return 'vacances';
+  return profile;
+}
+function profileLabel(p){return DATA.meta.profiles[p]||p;}
 
 /* ================= Arrêts ================= */
 function stopKey(entry){return entry.nom+'|'+entry.city;}
@@ -254,11 +276,11 @@ function toMin(t){const [h,m]=t.split(':').map(Number);return h*60+m;}
 function nextBuses(stopKeyStr,dest,profile,nowMin){
   const res=[];
   Object.entries(DATA.lines).forEach(([line,L])=>{
+    const prof=resolveProfile(line,profile);
     Object.entries(L.dirs).forEach(([dirKey,D])=>{
       const st=D.stops.find(s=>stopKey(s)===stopKeyStr);
       if(!st) return;
-      const times=(st.profiles[profile]||[]);
-      times.forEach(x=>{
+      (st.profiles[prof]||[]).forEach(x=>{
         if(!x.to.includes(dest)) return;
         const m=toMin(x.t);
         if(m>=nowMin) res.push({line,dir:dirKey,time:x.t,min:m-nowMin,headsign:D.headsign});
@@ -276,11 +298,10 @@ function fmtMin(m){
   return 'dans '+m+' min';
 }
 function lineName(n){
-  const L=DATA.lines[n];
-  return n==='12'?'Salon → Lançon':n==='17'?'Salon ↔ Aéroport':'Lançon → Salon (école)';
+  return n==='12'?'Salon → Lançon':n==='17'?'Salon ↔ Aéroport':n==='25'?'Salon ↔ Aix':'Lançon → Salon (école)';
 }
 function renderNext(){
-  const dest=$('destSalon').classList.contains('sel')?'SALON':$('destLancon').classList.contains('sel')?'LANCON':null;
+  const dest=$('destSalon').classList.contains('sel')?'SALON':$('destLancon').classList.contains('sel')?'LANCON':$('destAix').classList.contains('sel')?'AIX':null;
   const profile=todayProfile();
   const wrap=$('result');
   if(!dest||!stopKeySel){
@@ -288,7 +309,7 @@ function renderNext(){
     return;
   }
   const city=cityOfStopKey(stopKeySel);
-  if(dest==='SALON'&&city==='Salon-de-Provence'||dest==='LANCON'&&city==='Lançon-Provence'){
+  if(dest==='SALON'&&city==='Salon-de-Provence'||dest==='LANCON'&&city==='Lançon-Provence'||dest==='AIX'&&city==='Aix-en-Provence'){
     wrap.innerHTML=`<div class="none">Tu es déjà à ${TOWN[dest]} 😄 — regarde la ligne pour aller vers l’autre ville.</div>`;
     return;
   }
@@ -297,7 +318,7 @@ function renderNext(){
   const list=nextBuses(stopKeySel,dest,profile,nowMin);
   if(!list.length){
     const next=nextBuses(stopKeySel,dest,profile,0);
-    const label=DATA.meta.profiles[profile]||profile;
+    const label=profileLabel(profile);
     if(next.length){
       wrap.innerHTML=`<div class="none">Plus de bus aujourd’hui (${label}) à cet arrêt.<br>Premier bus : <b>${next[0].time}</b> (ligne ${next[0].line}) — demain matin.</div>`;
     }else{
@@ -305,7 +326,7 @@ function renderNext(){
     }
     return;
   }
-  wrap.innerHTML='<div class="daychip"><span class="c on">Aujourd’hui : '+DATA.meta.profiles[profile]+'</span></div>'+
+  wrap.innerHTML='<div class="daychip"><span class="c on">Aujourd’hui : '+profileLabel(profile)+'</span></div>'+
     list.map((b,i)=>E_BUS(b,i)).join('');
 }
 function E_BUS(b,i){
@@ -338,8 +359,8 @@ function locate(){
       stopKeySel=stopKey(best);
       selectStopByKey(stopKeySel);
       btn.classList.add('found');
-      // Destination suggérée : l’autre ville
-      const suggested=best.city==='Salon-de-Provence'?'LANCON':best.city==='Lançon-Provence'?'SALON':null;
+      // Destination suggérée : l’autre ville (ou Aix si on est à la gare routière d'Aix)
+      const suggested=best.city==='Salon-de-Provence'?'LANCON':best.city==='Lançon-Provence'?'SALON':best.city==='Aix-en-Provence'?'SALON':null;
       if(suggested) setDest(suggested);
       renderNext();
       const note=document.createElement('div');
@@ -357,6 +378,7 @@ function locate(){
 function setDest(d){
   $('destSalon').classList.toggle('sel',d==='SALON');
   $('destLancon').classList.toggle('sel',d==='LANCON');
+  $('destAix').classList.toggle('sel',d==='AIX');
   renderNext();
 }
 
@@ -405,13 +427,19 @@ function pdfLinks(n,L){
 }
 let sheetProfile = null; // profil choisi dans les fiches lignes (null = le jour actuel)
 function drawLineSheet(n,dirKey,profile){
-  const D=DATA.lines[n].dirs[dirKey];
+  const L=DATA.lines[n];
+  const D=L.dirs[dirKey];
   const container=$('sheet-'+n);
   if(!D){container.innerHTML='<p style="font-size:12px;color:var(--muted)">Aucune donnée pour cette direction.</p>';return;}
   const now=new Date().getHours()*60+new Date().getMinutes();
-  const activeProf = profile || todayProfile();
+  const activeProf = resolveProfile(n, profile || todayProfile());
+  // puces : profils réellement présents sur la ligne (ordre stable)
+  const present=PROFILE_ORDER.filter(p=>D.stops.some(s=>s.profiles[p]&&s.profiles[p].length));
   let html=`<div class="daychip">`;
-  PROFILES.forEach(p=>{const has=D.stops.some(s=>s.profiles[p]&&s.profiles[p].length); if(has) html+=`<span class="c ${p===activeProf?'on':''}" data-p="${p}">${DATA.meta.profiles[p]}</span>`;});
+  if(!present.length){ // repli : profils présents sans ordre connu
+    Object.keys(DATA.meta.profiles).forEach(p=>{if(D.stops.some(s=>s.profiles[p]&&s.profiles[p].length)) present.push(p);});
+  }
+  present.forEach(p=>html+=`<span class="c ${p===activeProf?'on':''}" data-p="${p}">${profileLabel(p)}</span>`);
   html+=`</div><div class="stopsheet">`;
   D.stops.forEach(s=>{
     const times=(s.profiles[activeProf]||[]).map(x=>x.t);
@@ -444,8 +472,9 @@ function init(){
   if(h){const k=h.nom+'|Salon-de-Provence'; if(selectStopByKey(k)) stopKeySel=k; else {stopKeySel=$('stopSelect').value;}}
   else stopKeySel=$('stopSelect').value;
   setDest('LANCON');
-  $('updatedText').textContent='Horaires à jour de '+fmtDate(DATA.meta.generatedAt)+' — période '+DATA.meta.feedPeriod;
-  $('period').textContent=DATA.meta.feedPeriod;
+  const p1=DATA.meta.feedPeriod||''; const p2=DATA.meta.cartreizePeriod||'';
+  $('updatedText').textContent='Horaires à jour de '+fmtDate(DATA.meta.generatedAt)+' — Libébus '+p1+(p2?' · Cartreize '+p2:'');
+  $('period').textContent=p1+(p2?' · '+p2:'');
   renderLines();
   renderNext();
   // rafraîchissement minute
@@ -456,6 +485,7 @@ function fmtDate(iso){const d=new Date(iso+'T12:00:00Z');return d.toLocaleDateSt
 $('stopSelect').onchange=()=>{stopKeySel=$('stopSelect').value;renderNext();};
 $('destSalon').onclick=()=>setDest('SALON');
 $('destLancon').onclick=()=>setDest('LANCON');
+$('destAix').onclick=()=>setDest('AIX');
 $('geoBtn').onclick=locate;
 
 /* ================= Visionneuse PDF interne =================
